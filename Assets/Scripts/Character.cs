@@ -8,6 +8,8 @@ public class Character : MonoBehaviour {
     public float health = 100f;
     public float maxHealth = 100f;
 
+    public float attackRadius = 0.5f;
+
     public HashSet<Object> blockers = new HashSet<Object>();
 
     CharacterMotor motor;
@@ -54,7 +56,7 @@ public class Character : MonoBehaviour {
 
     public void ReceiveEvent(string evt) {
         if (evt.Equals("strike")) {
-            Collider[] cols = Physics.OverlapSphere(transform.position + transform.forward * capsule.radius * 2f + transform.up, capsule.radius, LayerMask.GetMask(new string[] { "Characters" }), QueryTriggerInteraction.Ignore);
+            Collider[] cols = Physics.OverlapSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius, LayerMask.GetMask(new string[] { "Characters" }), QueryTriggerInteraction.Ignore);
             foreach (Collider c in cols){
                 Character character = c.GetComponent<Character>();
                 if(character != null && character != this) {
@@ -68,6 +70,6 @@ public class Character : MonoBehaviour {
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
         CapsuleCollider capsule = GetComponent<CapsuleCollider>();
-        Gizmos.DrawSphere(transform.position + transform.forward * capsule.radius * 2f + transform.up, capsule.radius);
+        Gizmos.DrawSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius);
     }
 }
