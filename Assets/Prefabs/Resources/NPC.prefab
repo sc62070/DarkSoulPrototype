@@ -68,6 +68,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
+  attackRadius: 0.5
+  isBlocking: 0
 --- !u!95 &95026912858024326
 Animator:
   serializedVersion: 3
@@ -140,7 +142,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   collisionQuality: 1
-  characterCollisionBehaviour: 0
+  characterCollisionBehaviour: 1
   characterPushForce: 4
   rigidbodyCollisionBehaviour: 0
   rigidbodyPushForce: 600
@@ -282,6 +284,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
+  attackRadius: 0.5
+  isBlocking: 0
 --- !u!1 &3676284036545406976
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ namespace Unimotion {
 
         private float targetAngle = 25f;
 
+        private Queue<string> inputQueue = new Queue<string>();
+
         void Awake() {
             DontDestroyOnLoad(this);
             motor = GetComponent<CharacterMotor>();
@@ -90,7 +92,8 @@ namespace Unimotion {
 
             // Attacking
             if (Input.GetButtonDown("R1") && !character.IsBlocked()) {
-                animator.CrossFadeInFixedTime("Attack", 0.2f);
+                //animator.CrossFadeInFixedTime("Attack", 0.2f);
+                character.Attack(AttackType.Light);
             }
 
             // Evading

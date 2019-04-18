@@ -445,8 +445,17 @@ ModelImporter:
           serializedVersion: 2
           curve:
           - serializedVersion: 3
-            time: 0
-            value: 1.0008159
+            time: -0.00090789795
+            value: 0.7994001
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.021902274
+          - serializedVersion: 3
+            time: 0.16441211
+            value: 0.29231974
             inSlope: 0
             outSlope: 0
             tangentMode: 0
@@ -454,31 +463,13 @@ ModelImporter:
             inWeight: 0.33333334
             outWeight: 0.33333334
           - serializedVersion: 3
-            time: 0.10061264
-            value: 1
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.5014696
-          - serializedVersion: 3
-            time: 0.17370383
-            value: 0.27184838
-            inSlope: 0.0347409
-            outSlope: 0.0347409
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.8153217
-          - serializedVersion: 3
             time: 0.2516469
             value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
             weightedMode: 0
-            inWeight: 0.33333334
+            inWeight: 0.022186525
             outWeight: 0.13886108
           - serializedVersion: 3
             time: 1
@@ -494,7 +485,7 @@ ModelImporter:
           rotationOrder: 4
       events:
       - time: 0.36932707
-        functionName: ReceiveEvent
+        functionName: SendEvent
         data: strike
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -683,6 +674,13 @@ ModelImporter:
       - time: 0.19432266
         functionName: SendEvent
         data: toStrike
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.19248825
+        functionName: SendEvent
+        data: strike
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
