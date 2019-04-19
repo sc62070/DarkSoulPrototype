@@ -9,6 +9,9 @@ public class Character : MonoBehaviourPun {
     public float health = 100f;
     public float maxHealth = 100f;
 
+    public float stamina = 100f;
+    public float maxStamina = 100f;
+
     public float attackRadius = 0.5f;
 
     public bool isBlocking = false;
@@ -21,6 +24,9 @@ public class Character : MonoBehaviourPun {
 
     CharacterMotor motor;
     CapsuleCollider capsule;
+
+    private float timeSinceStaminaConsume = 0f;
+    private float timeSinceStaminaRunout = 0f;
 
     void Awake() {
         motor = GetComponent<CharacterMotor>();
@@ -38,40 +44,58 @@ public class Character : MonoBehaviourPun {
         motor.canJump = blockers.Count == 0;
         motor.canTurn = blockers.Count == 0;
 
-        if (!IsBlocked()) {
-            lastAttackTimer -= Time.deltaTime;
-        }
+        if (photonView.IsMine) {
+            motor.animator.SetBool("Blocking", isBlocking);
 
-        motor.animator.SetBool("Blocking", isBlocking);
+            if (!IsBlocked()) {
+                lastAttackTimer -= Time.deltaTime;
+            }
+        }
 
     }
 
     void LateUpdate() {
-        if(IsBlocked() || isEvading) {
+
+        timeSinceStaminaConsume += Time.deltaTime;
+        timeSinceStaminaRunout += Time.deltaTime;
+
+        // Regenerate stamina
+        if (timeSinceStaminaConsume > 1.5f && timeSinceStaminaRunout > 3f && !IsBlocked()) {
+            stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
+        }
+
+        if (IsBlocked() || isEvading) {
             isBlocking = false;
         }
+
     }
 
     public void Attack(AttackType type) {
 
-        isBlocking = false;
-        isEvading = false;
+        if (photonView.IsMine && !IsBlocked() && stamina > 0f) {
+            isBlocking = false;
+            isEvading = false;
 
-        AttackMove move = type == AttackType.Light ? AttackMoves.slashR : AttackMoves.slashHeavy;
+            AttackMove move = type == AttackType.Light ? AttackMoves.slashR : AttackMoves.slashHeavy;
 
-        if (lastAttackMove != null && lastAttackMove.nextAttack != null && lastAttackTimer > 0f) {
-            move = lastAttackMove.nextAttack;
+            if (lastAttackMove != null && lastAttackMove.nextAttack != null && lastAttackTimer > 0f) {
+                move = lastAttackMove.nextAttack;
+            }
+
+            lastAttackTimer = 0.5f;
+            lastAttackMove = move;
+
+            photonView.RPC("PlayState", RpcTarget.All, move.stateName, 0.2f);
+
         }
 
-        lastAttackTimer = 0.5f;
-        lastAttackMove = move;
-        //motor.animator.CrossFadeInFixedTime(move.stateName, 0.2f);
-        photonView.RPC("PlayState", RpcTarget.All, move.stateName, 0.2f);
     }
 
+    [PunRPC]
     public void Stagger() {
-        //motor.animator.CrossFadeInFixedTime("Stagger", 0.2f);
-        photonView.RPC("PlayState", RpcTarget.All, "Stagger", 0.2f);
+        if (photonView.IsMine) {
+            photonView.RPC("PlayState", RpcTarget.All, "Stagger", 0.2f);
+        }
     }
 
     public void Evade(Direction direction) {
@@ -96,15 +120,16 @@ public class Character : MonoBehaviourPun {
     }
 
     public void Block(bool flag) {
-        isBlocking = flag;
-        if(flag == true && !IsBlocked() && motor.Grounded && !isEvading) {
+        bool tmp = isBlocking;
+        isBlocking = false;
+        if (flag == true && !IsBlocked() && motor.Grounded && !isEvading) {
             isBlocking = true;
         }
     }
 
     [PunRPC]
     public void Damage(float q, Vector3 direction) {
-        if(health > 0f) {
+        if (health > 0f) {
             health -= q;
 
             motor.TurnTowards(-direction, CharacterMotor.TurnBehaviour.Instant);
@@ -117,32 +142,58 @@ public class Character : MonoBehaviourPun {
     }
 
     [PunRPC]
+    public void AttemptDamage(float q, Vector3 direction, int attackerViewId) {
+
+        Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
+
+        if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
+            attacker.photonView.RPC("Stagger", RpcTarget.All);
+        } else {
+            Damage(q, direction);
+        }
+    }
+
+    [PunRPC]
     public void PlayState(string name, float fade) {
         motor.animator.CrossFadeInFixedTime(name, fade);
     }
 
     public void Kill() {
         motor.animator.CrossFadeInFixedTime("Die", 0.2f);
-        Destroy(GetComponent<Character>());
+        Destroy(GetComponent<Target>());
     }
 
     public bool IsBlocked() {
         return blockers.Count > 0;
     }
 
+    public bool ConsumeStamina(float q) {
+        if (stamina > 0f) {
+            stamina = Mathf.Clamp(stamina - q, 0f, maxStamina);
+
+            timeSinceStaminaConsume = 0f;
+
+            if (stamina <= 0f) {
+                timeSinceStaminaRunout = 0f;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
     public void SendEvent(string evt) {
         if (photonView.IsMine) {
             if (evt.Equals("strike")) {
+
+                // The animation reached the point in which stamina must be consumed
+                ConsumeStamina(30f * lastAttackMove.damageMultiplier);
+
                 Collider[] cols = Physics.OverlapSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius, LayerMask.GetMask(new string[] { "Characters" }), QueryTriggerInteraction.Ignore);
                 foreach (Collider c in cols) {
                     Character character = c.GetComponent<Character>();
                     if (character != null && character != this && !character.isEvading) {
-                        if (character.isBlocking && Vector3.Angle(character.transform.forward, transform.forward) > 90f) {
-                            Stagger();
-                        } else {
-                            character.photonView.RPC("Damage", RpcTarget.All, 35f, character.transform.position - transform.position);
-                        }
-                        
+                        character.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, character.transform.position - transform.position, photonView.ViewID);
                     }
                 }
             } else if (evt.Equals("cancelBlockMovement")) {
@@ -165,8 +216,10 @@ public enum AttackType {
     Light, Heavy
 }
 
+[System.Serializable]
 public class AttackMove {
     public string stateName;
+    public AttackType type;
     public float damageMultiplier = 1f;
     public AttackMove nextAttack;
 }
@@ -176,6 +229,7 @@ public class AttackMoves {
     // Heavy slashes
     public static AttackMove slashHeavy = new AttackMove() {
         stateName = "Slash Heavy",
+        type = AttackType.Heavy,
         damageMultiplier = 2f,
         nextAttack = null
     };
@@ -183,12 +237,14 @@ public class AttackMoves {
     // Light slashes
     public static AttackMove slashRL = new AttackMove() {
         stateName = "Slash RL",
+        type = AttackType.Light,
         damageMultiplier = 1f,
         nextAttack = null
     };
 
     public static AttackMove slashR = new AttackMove() {
         stateName = "Slash R",
+        type = AttackType.Light,
         damageMultiplier = 1f,
         nextAttack = slashRL
     };

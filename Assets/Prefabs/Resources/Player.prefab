@@ -73,9 +73,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
+  stamina: 100
+  maxStamina: 100
   attackRadius: 0.5
   isBlocking: 0
   isEvading: 0
+  lastAttackMove:
+    stateName: 
+    type: 0
+    damageMultiplier: 1
   lastAttackTimer: 0
   blockers: []
 --- !u!95 &95026912858024326
@@ -275,9 +281,17 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: Stuck
+  - Type: 1
+    SynchronizeType: 0
+    Name: Curve
+  - Type: 4
+    SynchronizeType: 1
+    Name: Blocking
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!1 &3676284036545406976
 GameObject:
   m_ObjectHideFlags: 0

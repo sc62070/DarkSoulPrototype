@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6936f18ae084424582095e2885ded59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!114 &3729584334918360885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,8 +68,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
+  stamina: 100
+  maxStamina: 100
   attackRadius: 0.5
-  isBlocking: 0
+  isBlocking: 1
   isEvading: 0
   lastAttackTimer: 0
   blockers: []
@@ -224,9 +227,17 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: Stuck
+  - Type: 1
+    SynchronizeType: 0
+    Name: Curve
+  - Type: 4
+    SynchronizeType: 1
+    Name: Blocking
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!114 &824043930
 MonoBehaviour:
   m_ObjectHideFlags: 0

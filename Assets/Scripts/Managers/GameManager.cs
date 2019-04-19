@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
             localPlayer.transform.position = Vector3.zero;
             localPlayer.transform.rotation = Quaternion.identity;
 
+            FindObjectOfType<UIManager>().character = localPlayer.GetComponent<Character>();
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
