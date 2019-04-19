@@ -18,7 +18,7 @@ namespace Unimotion {
 
         private float targetAngle = 25f;
 
-        private Queue<string> inputQueue = new Queue<string>();
+        public ButtonQueue buttonQueue = new ButtonQueue();
 
         void Awake() {
             DontDestroyOnLoad(this);
@@ -36,37 +36,68 @@ namespace Unimotion {
             animator = GetComponent<CharacterMotor>().animator;
 
             if (!photonView.IsMine && PhotonNetwork.IsConnected && GetComponent<CharacterMotor>() != null) {
-                Destroy(GetComponent<CharacterMotor>());
+                GetComponent<CharacterMotor>().enabled = false;
             }
 
             motor.OnFrameFinish += PositionSocket;
 
         }
 
+        private void Update() {
+            buttonQueue.Update();
+        }
+
         void LateUpdate() {
 
-            
+            if (!photonView.IsMine) {
+                return;
+            }
 
             float inputMagnitude = GetInputMagnitude();
             Vector3 inputVector = GetInputVector();
 
-            // Movement
-            if (inputMagnitude > 0.05f) {
-                motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
-                motor.TurnTowards(inputVector);
-            }
+            if (!character.IsBlocked()) {
 
-            // Jumping
-            if (Input.GetButtonDown("Cross")) {
-                motor.Jump();
-            }
+                // Movement
+                if (inputMagnitude > 0.05f) {
+                    motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
+                    motor.TurnTowards(inputVector);
+                }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
-                motor.velocity = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * Random.Range(20f, 40f) + Vector3.up * 10f;
-            }
+                // Jumping
+                if (buttonQueue.Consume("Cross")) {
+                    motor.Jump();
+                }
 
-            if (Input.GetKeyDown(KeyCode.F)) {
-                motor.AddForce(transform.forward * 500f);
+                if (Input.GetKeyDown(KeyCode.R)) {
+                    motor.velocity = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * Random.Range(20f, 40f) + Vector3.up * 10f;
+                }
+
+                if (Input.GetKeyDown(KeyCode.F)) {
+                    motor.AddForce(transform.forward * 500f);
+                }
+
+                // Attacking
+                if (buttonQueue.Consume("R1")) {
+                    character.Attack(AttackType.Light);
+                }
+
+                if (buttonQueue.Consume("R2")) {
+                    character.Attack(AttackType.Heavy);
+                }
+
+                // Blocking
+                if(Input.GetButton("L1")){
+                    character.Block(true);
+                } else {
+                    character.Block(false);
+                }
+
+                // Evading
+                if (buttonQueue.Consume("Circle") && !character.IsBlocked()) {
+                    character.Evade(GetInputDirection());
+
+                }
             }
 
             // Targeting
@@ -78,7 +109,7 @@ namespace Unimotion {
                     });
 
                     targetables = targetables.FindAll(delegate (Target target) {
-                        return Vector3.Distance(transform.position, target.transform.position) <= minTargetDistance;
+                        return Vector3.Distance(transform.position, target.transform.position) <= minTargetDistance && target.gameObject != gameObject;
                     });
 
                     if (targetables.Count > 0) {
@@ -86,32 +117,6 @@ namespace Unimotion {
                     }
                 } else {
                     target = null;
-                }
-
-            }
-
-            // Attacking
-            if (Input.GetButtonDown("R1") && !character.IsBlocked()) {
-                //animator.CrossFadeInFixedTime("Attack", 0.2f);
-                character.Attack(AttackType.Light);
-            }
-
-            // Evading
-            if (Input.GetButtonDown("Circle") && !character.IsBlocked()) {
-                switch (GetInputDirection()) {
-                    case Direction.Left:
-                        animator.CrossFadeInFixedTime("Dodge Left", 0.2f);
-                        break;
-                    case Direction.Right:
-                        animator.CrossFadeInFixedTime("Dodge Right", 0.2f);
-                        break;
-                    case Direction.Up:
-                        animator.CrossFadeInFixedTime("Dodge Front", 0.2f);
-                        break;
-                    case Direction.Down:
-                    case Direction.None:
-                        animator.CrossFadeInFixedTime("Dodge Back", 0.2f);
-                        break;
                 }
 
             }
@@ -247,6 +252,7 @@ namespace Unimotion {
 
     public enum Direction { Up, Right, Down, Left, None }
     public enum InputType { Normal, Raw }
+
 }
 
 

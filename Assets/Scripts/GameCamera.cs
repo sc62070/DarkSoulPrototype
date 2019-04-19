@@ -24,8 +24,10 @@ public class GameCamera : MonoBehaviour {
         // Jerky camera movement is because of this
         /// Fix later...
 
-        transform.position = socket.transform.position;
-        transform.rotation = socket.transform.rotation;
+        if(socket != null) {
+            transform.position = socket.transform.position;
+            transform.rotation = socket.transform.rotation;
+        }
 
     }
 

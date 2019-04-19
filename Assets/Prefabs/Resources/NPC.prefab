@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4765457767852056}
-  - component: {fileID: 3083061565032927631}
   - component: {fileID: 3729584334918360885}
   - component: {fileID: 95026912858024326}
   - component: {fileID: 136687163193735536}
@@ -18,7 +17,6 @@ GameObject:
   - component: {fileID: 6581929348238784214}
   - component: {fileID: 3355255001820151311}
   - component: {fileID: 824043930}
-  - component: {fileID: 1185700483}
   m_Layer: 9
   m_Name: NPC
   m_TagString: Untagged
@@ -42,18 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3083061565032927631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367994779375688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3d8e82f8f55f0943bfbf8f90bc38698, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3729584334918360885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +56,9 @@ MonoBehaviour:
   maxHealth: 100
   attackRadius: 0.5
   isBlocking: 0
+  lastAttackTimer: 0
+  blockers: []
+  view: {fileID: 0}
 --- !u!95 &95026912858024326
 Animator:
   serializedVersion: 3
@@ -196,7 +185,7 @@ MonoBehaviour:
   - {fileID: 6581929348238784214}
   - {fileID: 3355255001820151311}
   viewIdField: 0
-  InstantiationId: 1
+  InstantiationId: 2
   isRuntimeInstantiated: 0
 --- !u!114 &6581929348238784214
 MonoBehaviour:
@@ -270,22 +259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e170b0faa0f4acb488e30711aa740146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1185700483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367994779375688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2729af4db641fc4ebd4842349ea4e6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
-  attackRadius: 0.5
-  isBlocking: 0
 --- !u!1 &3676284036545406976
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,7 +655,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5a27988b7b4517e4695874d04e3cb983, type: 2}
+  - {fileID: 2100000, guid: 1a896c711bddaa849a0f0daeac607ae2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

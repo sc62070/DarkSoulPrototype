@@ -48,5 +48,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = "v1";
 
         PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.ConnectToRegion("usw");
     }
 }

@@ -7,11 +7,19 @@ public class StateBehaviour : StateMachineBehaviour {
 
     public bool useRootMotion = false;
     public bool blockMovement = false;
+    public bool evade = false;
+
+    Animator animator = null;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        this.animator = animator;
         if (blockMovement) {
             animator.GetComponent<Character>().blockers.Add(this);
+        }
+
+        if (evade) {
+            animator.GetComponent<Character>().isEvading = true;
         }
     }
 
@@ -24,6 +32,11 @@ public class StateBehaviour : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         animator.GetComponent<Character>().blockers.Remove(this);
+        this.animator = null;
+
+        if (evade) {
+            animator.GetComponent<Character>().isEvading = false;
+        }
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
@@ -34,8 +47,15 @@ public class StateBehaviour : StateMachineBehaviour {
     }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
+    override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+
+        /*animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, animator.GetComponent<Character>().isBlocking ? 1.0f : 0.0f);
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, animator.GetComponent<Character>().isBlocking ? 1.0f : 0.0f);
+
+        Transform t = animator.transform;
+
+        animator.SetIKRotation(AvatarIKGoal.LeftHand, t.rotation);
+        animator.SetIKPosition(AvatarIKGoal.LeftHand, t.position + t.up * 1.2f + t.forward * 0.3f);*/
+    }
+
 }
