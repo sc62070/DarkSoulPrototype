@@ -25,6 +25,10 @@ public class Character : MonoBehaviourPun {
     void Awake() {
         motor = GetComponent<CharacterMotor>();
         capsule = GetComponent<CapsuleCollider>();
+
+        motor.OnLand += delegate () {
+            photonView.RPC("PlayState", RpcTarget.All, "Land", 0.1f);
+        };
     }
 
     // Update is called once per frame
@@ -119,7 +123,7 @@ public class Character : MonoBehaviourPun {
 
     public void Kill() {
         motor.animator.CrossFadeInFixedTime("Die", 0.2f);
-        Destroy(GetComponent<Target>());
+        Destroy(GetComponent<Character>());
     }
 
     public bool IsBlocked() {
@@ -133,12 +137,10 @@ public class Character : MonoBehaviourPun {
                 foreach (Collider c in cols) {
                     Character character = c.GetComponent<Character>();
                     if (character != null && character != this && !character.isEvading) {
-                        //character.GetComponent<CharacterMotor>().TurnTowards(transform.position - character.transform.position, CharacterMotor.TurnBehaviour.Instant);
-                        //character.Damage(35f * lastAttackMove.damageMultiplier);
-                        if (!character.isBlocking) {
-                            character.photonView.RPC("Damage", RpcTarget.All, 35f, character.transform.position - transform.position);
-                        } else {
+                        if (character.isBlocking && Vector3.Angle(character.transform.forward, transform.forward) > 90f) {
                             Stagger();
+                        } else {
+                            character.photonView.RPC("Damage", RpcTarget.All, 35f, character.transform.position - transform.position);
                         }
                         
                     }
