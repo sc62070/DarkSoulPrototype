@@ -6,8 +6,6 @@ using Unimotion;
 
 public class CharacterAI : MonoBehaviour {
 
-    public Target target;
-
     private Character character;
     private CharacterMotor motor;
 
@@ -23,25 +21,25 @@ public class CharacterAI : MonoBehaviour {
     void Update() {
 
         // Check for enemies
-        if(target == null) {
+        if(character.target == null) {
             Collider[] cols = Physics.OverlapSphere(transform.position, 10f, LayerMask.GetMask(new string[] { "Characters" }), QueryTriggerInteraction.Ignore);
 
             foreach (Collider c in cols){
                 Target t = c.GetComponent<Target>();
                 if (t != null && t.gameObject != character.gameObject) {
-                    target = t;
+                    character.target = t;
                 }
             }
         }
 
-        if(target != null) {
+        if(character.target != null) {
             character.Block(true);
 
-            motor.TurnTowards((target.transform.position - transform.position));
+            motor.TurnTowards((character.target.transform.position - transform.position));
 
-            if (Vector3.Distance(transform.position, target.transform.position) > 2f) {
+            if (Vector3.Distance(transform.position, character.target.transform.position) > 2f) {
                 NavMeshPath path = new NavMeshPath();
-                bool canReach = NavMesh.CalculatePath(transform.position, target.transform.position, NavMesh.AllAreas, path);
+                bool canReach = NavMesh.CalculatePath(transform.position, character.target.transform.position, NavMesh.AllAreas, path);
                 if (canReach) {
                     motor.Walk((path.corners[1] - transform.position).normalized);
                 }

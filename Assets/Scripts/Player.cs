@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 namespace Unimotion {
@@ -14,7 +15,6 @@ namespace Unimotion {
         public InputType inputType;
 
         public CameraSocket cameraSocket;
-        public Target target;
 
         private float targetAngle = 25f;
 
@@ -30,6 +30,10 @@ namespace Unimotion {
             cameraSocket = new GameObject("Camera Socket").AddComponent<CameraSocket>();
             cameraSocket.gameObject.name = "Camera Socket";
             DontDestroyOnLoad(cameraSocket.gameObject);
+
+            character.OnDie += delegate () {
+                StartCoroutine(DieCoroutine());
+            };
         }
 
         private void Start() {
@@ -56,7 +60,7 @@ namespace Unimotion {
             float inputMagnitude = GetInputMagnitude();
             Vector3 inputVector = GetInputVector();
 
-            if (!character.IsBlocked()) {
+            if (!character.isBusy) {
 
                 // Movement
                 if (inputMagnitude > 0.05f) {
@@ -69,40 +73,45 @@ namespace Unimotion {
                     motor.Jump();
                 }
 
-                if (Input.GetKeyDown(KeyCode.R)) {
-                    motor.velocity = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * Random.Range(20f, 40f) + Vector3.up * 10f;
-                }
-
                 if (Input.GetKeyDown(KeyCode.F)) {
                     motor.AddForce(transform.forward * 500f);
                 }
 
+                if (Input.GetKeyDown(KeyCode.R)) {
+                    character.inCombat = !character.inCombat;
+                }
+
                 // Attacking
-                if (buttonQueue.Consume("R1")) {
+                if (!character.isAttacking && buttonQueue.Consume("R1")) {
                     character.Attack(AttackType.Light);
                 }
 
-                if (buttonQueue.Consume("R2")) {
+                if (!character.isAttacking && buttonQueue.Consume("R2")) {
                     character.Attack(AttackType.Heavy);
                 }
 
                 // Blocking
-                if(Input.GetButton("L1")){
+                if (Input.GetButton("L1")) {
                     character.Block(true);
                 } else {
                     character.Block(false);
                 }
 
                 // Evading
-                if (buttonQueue.Consume("Circle") && !character.IsBlocked()) {
+                if (buttonQueue.Consume("Circle")) {
                     character.Evade(GetInputDirection());
 
+                }
+
+                // Heal
+                if(buttonQueue.Consume("Square")) {
+                    character.Heal();
                 }
             }
 
             // Targeting
             if (Input.GetButtonDown("R3")) {
-                if (target == null) {
+                if (character.target == null) {
                     List<Target> targetables = new List<Target>(FindObjectsOfType<Target>());
                     targetables.Sort(delegate (Target x, Target y) {
                         return Vector3.Distance(this.transform.position, x.transform.position).CompareTo(Vector3.Distance(this.transform.position, y.transform.position));
@@ -113,14 +122,17 @@ namespace Unimotion {
                     });
 
                     if (targetables.Count > 0) {
-                        target = targetables[0];
+                        character.target = targetables[0];
                     }
                 } else {
-                    target = null;
+                    character.target = null;
                 }
 
             }
 
+            if(transform.position.y < -50f) {
+                character.Kill();
+            }
         }
 
         public Direction GetInputDirection() {
@@ -209,18 +221,18 @@ namespace Unimotion {
             cameraSocket.transform.position = desiredPosition;
 
             // If there is a combat target
-            if (target != null) {
+            if (character.target != null) {
 
                 // Move the camera so it accomodates the player right behind the target
-                Quaternion tmp = Quaternion.LookRotation((target.transform.position - transform.position).normalized, -motor.GetGravity().normalized);
+                Quaternion tmp = Quaternion.LookRotation((character.target.transform.position - transform.position).normalized, -motor.GetGravity().normalized);
                 cameraSocket.transform.rotation = Quaternion.Lerp(cameraSocket.transform.rotation, tmp, 2 * Time.deltaTime);
 
                 // Fix the camera at certain angle
                 cameraSocket.transform.localEulerAngles = new Vector3(targetAngle, cameraSocket.transform.localEulerAngles.y, cameraSocket.transform.localEulerAngles.z);
 
                 // Look at the target
-                Camera.main.transform.rotation = Quaternion.LookRotation((target.transform.position - Camera.main.transform.position).normalized, -motor.GetGravity().normalized);
-                motor.TurnTowards((target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Instant);
+                Camera.main.transform.rotation = Quaternion.LookRotation((character.target.transform.position - Camera.main.transform.position).normalized, -motor.GetGravity().normalized);
+                motor.TurnTowards((character.target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Instant);
             }
 
             // Correct camera rotation
@@ -246,6 +258,14 @@ namespace Unimotion {
         private void OnDrawGizmosSelected() {
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(transform.position, finalMovementVector);
+        }
+
+        public IEnumerator DieCoroutine() {
+            yield return new WaitForSeconds(4f);
+            transform.position = Vector3.zero;
+            transform.gameObject.AddComponent<Target>();
+            character.health = character.maxHealth;
+            character.target = null;
         }
 
     }

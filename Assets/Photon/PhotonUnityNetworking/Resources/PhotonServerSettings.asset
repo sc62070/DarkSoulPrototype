@@ -38,5 +38,7 @@ MonoBehaviour:
   - AttemptDamage
   - RPCSetIsBlocking
   - Stagger
+  - Flinch
+  - PlaySound
   DisableAutoOpenWizard: 1
   ShowSettings: 1

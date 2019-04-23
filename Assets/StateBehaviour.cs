@@ -6,21 +6,22 @@ using UnityEngine;
 public class StateBehaviour : StateMachineBehaviour {
 
     public bool useRootMotion = false;
-    public bool blockMovement = false;
-    public bool evade = false;
+
+    public bool isBusy = false;
+    public bool isEvade = false;
+    public bool isAttack = false;
+    public bool isEquipped = false;
 
     Animator animator = null;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         this.animator = animator;
-        if (blockMovement) {
-            animator.GetComponent<Character>().blockers.Add(this);
-        }
 
-        if (evade) {
-            animator.GetComponent<Character>().isEvading = true;
-        }
+        animator.GetComponent<Character>().isBusy = isBusy;
+        animator.GetComponent<Character>().isEvading = isEvade;
+        animator.GetComponent<Character>().isAttacking = isAttack;
+        animator.GetComponent<Character>().isEquipped = isEquipped;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -31,10 +32,9 @@ public class StateBehaviour : StateMachineBehaviour {
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        animator.GetComponent<Character>().blockers.Remove(this);
         this.animator = null;
 
-        if (evade) {
+        if (isEvade) {
             animator.GetComponent<Character>().isEvading = false;
         }
     }

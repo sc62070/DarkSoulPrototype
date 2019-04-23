@@ -498,6 +498,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.2620968
+        functionName: SendEvent
+        data: swing
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -738,6 +745,13 @@ ModelImporter:
       - time: 0.8951487
         functionName: SendEvent
         data: cancelBlockMovement
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.14919356
+        functionName: SendEvent
+        data: swing
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -2601,6 +2615,13 @@ ModelImporter:
       - time: 0.7480438
         functionName: SendEvent
         data: cancelBlockMovement
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.33669356
+        functionName: SendEvent
+        data: swing
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

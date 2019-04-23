@@ -6,6 +6,7 @@ using Unimotion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 
 public class GameManager : MonoBehaviourPunCallbacks {
 
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     [Header("Texts")]
     public SystemText systemText;
+
+    public GameAnimations animations;
 
     private static string targetScene = "world";
     private static string targetMarkerId = "1";
@@ -101,4 +104,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
         SceneManager.LoadScene(targetScene);
     }
 
+}
+
+[System.Serializable]
+public class GameAnimations {
+    public RuntimeAnimatorController normalAnimator;
 }

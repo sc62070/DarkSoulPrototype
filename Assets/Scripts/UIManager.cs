@@ -19,10 +19,13 @@ public class UIManager : MonoBehaviour {
 
     void LateUpdate() {
 
-        healthBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.health / character.maxHealth) * healthBar.rect.width);
-        healthBarFill.anchoredPosition = Vector2.zero;
+        if(character != null) {
+            healthBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.health / character.maxHealth) * healthBar.rect.width);
+            healthBarFill.anchoredPosition = Vector2.zero;
 
-        staminaBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.stamina / character.maxStamina) * staminaBar.rect.width);
-        staminaBarFill.anchoredPosition = Vector2.zero;
+            staminaBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.stamina / character.maxStamina) * staminaBar.rect.width);
+            staminaBarFill.anchoredPosition = Vector2.zero;
+        }
+        
     }
 }
