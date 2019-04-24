@@ -43,6 +43,9 @@ public class SoundClips {
     public static string SWING_03 = prefix + "swing_03";
     public static string SWING_04 = prefix + "swing_04";
 
+    public static string BLOCK_01 = prefix + "block_01";
+    public static string BLOCK_02 = prefix + "block_02";
+
     public static string LAND = prefix + "land";
 
     public static string DRINK_ESTUS = prefix + "drink_estus";

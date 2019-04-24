@@ -81,11 +81,13 @@ public class Character : MonoBehaviourPun {
 
     void LateUpdate() {
 
-        timeSinceStaminaConsume += Time.deltaTime;
-        timeSinceStaminaRunout += Time.deltaTime;
+        if (!isAttacking) {
+            timeSinceStaminaConsume += Time.deltaTime;
+            timeSinceStaminaRunout += Time.deltaTime;
+        }
 
         // Regenerate stamina
-        if (timeSinceStaminaConsume > 1.5f && timeSinceStaminaRunout > 2.5f && !isAttacking && !isBlocking && !isEvading) {
+        if (timeSinceStaminaConsume > 1f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
             stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
         }
 
@@ -193,14 +195,22 @@ public class Character : MonoBehaviourPun {
 
     [PunRPC]
     public void AttemptDamage(float q, Vector3 direction, int attackerViewId) {
+        if (photonView.IsMine) {
+            Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
 
-        Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
+            if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
 
-        if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
-            attacker.photonView.RPC("Stagger", RpcTarget.All);
-            ConsumeStamina(q);
-        } else {
-            Damage(q, direction);
+                // This character blocked the incoming attack
+                attacker.photonView.RPC("Stagger", RpcTarget.All);
+                photonView.RPC("PlayState", RpcTarget.All, "Block Hit", 0.2f);
+
+                string[] clips = { SoundClips.BLOCK_01, SoundClips.BLOCK_02 };
+                photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
+
+                ConsumeStamina(q);
+            } else {
+                Damage(q, direction);
+            }
         }
     }
 
@@ -268,8 +278,8 @@ public class Character : MonoBehaviourPun {
                     if (character != null && character != this && !character.isEvading) {
                         character.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, character.transform.position - transform.position, photonView.ViewID);
 
-                        string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
-                        character.photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
+                        /*string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
+                        character.photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);*/
                     }
                 }
             } else if (evt.Equals("cancelBlockMovement")) {
