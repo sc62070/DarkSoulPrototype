@@ -184,6 +184,7 @@ namespace Unimotion {
             return Vector3.ClampMagnitude(input, 1f).magnitude;
         }
 
+
         public void PositionSocket() {
 
             // Get the real target position (add offset)
@@ -204,7 +205,7 @@ namespace Unimotion {
             // Before calculating desired distance, see if there is any obstacles to avoid
             float distance = 3f;
             RaycastHit hit;
-            bool didHit = Physics.Raycast(realTarget, transform.forward * -1f, out hit, distance, LayerMask.GetMask(new string[] { "Default" }), QueryTriggerInteraction.Ignore);
+            bool didHit = Physics.Raycast(realTarget, -cameraSocket.transform.forward, out hit, distance, LayerMask.GetMask(new string[] { "Default" }), QueryTriggerInteraction.Ignore);
 
             float maxDistance = 0f;
             Vector3 addition = Vector3.zero;

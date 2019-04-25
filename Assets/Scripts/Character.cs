@@ -210,6 +210,9 @@ public class Character : MonoBehaviourPun {
                 ConsumeStamina(q);
             } else {
                 Damage(q, direction);
+
+                string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
+                photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
             }
         }
     }

@@ -311,11 +311,16 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: Blocking
+  - Type: 4
+    SynchronizeType: 0
+    Name: Combat
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
   - SynchronizeType: 0
     LayerIndex: 1
+  - SynchronizeType: 0
+    LayerIndex: 2
 --- !u!1 &66461561528223548
 GameObject:
   m_ObjectHideFlags: 0
