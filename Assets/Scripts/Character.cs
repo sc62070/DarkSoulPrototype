@@ -26,6 +26,7 @@ public class Character : MonoBehaviourPun {
     public bool isEvading = false;
     public bool isBusy = false;
     public bool isEquipped = false;
+    public bool isWeaponDamaging = false;
 
     public AttackMove lastAttackMove = null;
     public float lastAttackTimer = 0f;
@@ -101,6 +102,11 @@ public class Character : MonoBehaviourPun {
             timeSinceNoTarget += Time.deltaTime;
         } else {
             timeSinceNoTarget = 0f;
+        }
+
+        // Manage weapon Damage
+        if (!isWeaponDamaging || !isAttacking) {
+            alreadyDamaged.Clear();
         }
 
         inCombat = target != null || timeSinceNoTarget < 4f;
@@ -198,21 +204,25 @@ public class Character : MonoBehaviourPun {
         if (photonView.IsMine) {
             Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
 
-            if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
+            if (!isEvading) {
+                if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
 
-                // This character blocked the incoming attack
-                attacker.photonView.RPC("Stagger", RpcTarget.All);
-                photonView.RPC("PlayState", RpcTarget.All, "Block Hit", 0.2f);
+                    // This character blocked the incoming attack
+                    attacker.photonView.RPC("Stagger", RpcTarget.All);
+                    photonView.RPC("PlayState", RpcTarget.All, "Block Hit", 0.2f);
 
-                string[] clips = { SoundClips.BLOCK_01, SoundClips.BLOCK_02 };
-                photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
+                    string[] clips = { SoundClips.BLOCK_01, SoundClips.BLOCK_02 };
+                    photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
 
-                ConsumeStamina(q);
-            } else {
-                Damage(q, direction);
+                    ConsumeStamina(q);
+                } else {
 
-                string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
-                photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
+                    // The incoming attack must succesfully damage this character
+                    Damage(q, direction);
+
+                    string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
+                    photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
+                }
             }
         }
     }
@@ -279,7 +289,7 @@ public class Character : MonoBehaviourPun {
                 foreach (Collider c in cols) {
                     Character character = c.GetComponent<Character>();
                     if (character != null && character != this && !character.isEvading) {
-                        character.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, character.transform.position - transform.position, photonView.ViewID);
+                        //character.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, character.transform.position - transform.position, photonView.ViewID);
 
                         /*string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
                         character.photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);*/
@@ -290,6 +300,12 @@ public class Character : MonoBehaviourPun {
             } else if (evt.Equals("drink")) {
                 health = Mathf.Clamp(health + 60f, 0f, maxHealth);
                 GetComponent<Inventory>().items.RemoveAt(0);
+            } else if (evt.Equals("startWeaponDamage")) {
+                alreadyDamaged.Clear();
+                isWeaponDamaging = true;
+            } else if (evt.Equals("stopWeaponDamage")) {
+                alreadyDamaged.Clear();
+                isWeaponDamaging = false;
             }
         }
 
@@ -301,6 +317,15 @@ public class Character : MonoBehaviourPun {
         if (evt.Equals("swing") && isAttacking) {
             string[] clips = { SoundClips.SWING_01, SoundClips.SWING_02, SoundClips.SWING_03, SoundClips.SWING_04 };
             PlaySound(clips[Random.Range(0, clips.Length)]);
+        }
+    }
+
+    public HashSet<Character> alreadyDamaged = new HashSet<Character>();
+
+    public void OnWeaponHit(Character characterHit) {
+        if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
+            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
+            alreadyDamaged.Add(characterHit);
         }
     }
 
@@ -350,10 +375,9 @@ public class Character : MonoBehaviourPun {
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
-        Gizmos.DrawSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius);
+        /*CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        Gizmos.DrawSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius);*/
     }
-
 }
 
 public enum AttackType {

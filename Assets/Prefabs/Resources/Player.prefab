@@ -83,6 +83,7 @@ MonoBehaviour:
   isEvading: 0
   isBusy: 0
   isEquipped: 0
+  isWeaponDamaging: 0
   lastAttackMove:
     stateName: 
     type: 0
