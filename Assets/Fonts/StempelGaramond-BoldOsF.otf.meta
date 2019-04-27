@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 763b4aa9b31dab641b092c50921c0c11
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Stempel Garamond Oldstyle Figur
+  fontNames:
+  - Stempel Garamond Oldstyle Figur
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 734ea9705cf0c4e4f992a633271a0f2b, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
