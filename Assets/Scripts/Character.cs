@@ -323,7 +323,8 @@ public class Character : MonoBehaviourPun {
     public HashSet<Character> alreadyDamaged = new HashSet<Character>();
 
     public void OnWeaponHit(Character characterHit) {
-        if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
+        //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
+        if (motor.animator.GetFloat("Damage") > 0.5f && photonView.IsMine) {
             characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
             alreadyDamaged.Add(characterHit);
         }
