@@ -79,10 +79,11 @@ public class Character : MonoBehaviourPun {
             motor.animator.SetBool("Climbing", currentLadder != null);
             
             if(currentLadder != null) {
-                transform.position = currentLadder.transform.position + Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up);
+                float distanceFromLadder = 0.4f;
+                transform.position = currentLadder.transform.position + Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up) - currentLadder.transform.forward * distanceFromLadder;
                 transform.forward = currentLadder.transform.forward;
 
-                if(Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up).magnitude > currentLadder.height - 1.75f) {
+                if(Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up).magnitude > currentLadder.height - 1.50f) {
                     currentLadder = null;
                     photonView.RPC("PlayState", RpcTarget.All, "Climb Up", 0.2f);
                 }
