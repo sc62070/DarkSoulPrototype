@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class CameraSocket : MonoBehaviour {
 
-    public HashSet<GameObject> listeners;
-
     void Start() {
 
     }
@@ -15,9 +13,4 @@ public class CameraSocket : MonoBehaviour {
 
     }
 
-    public void FirePositionChanged() {
-        foreach (GameObject o in listeners) {
-            o.SendMessage("OnPositionChanged");
-        }
-    }
 }

@@ -1,6 +1,6 @@
 ﻿using Photon.Pun;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Unimotion {
@@ -60,6 +60,11 @@ namespace Unimotion {
             float inputMagnitude = GetInputMagnitude();
             Vector3 inputVector = GetInputVector();
 
+            // Ladder movement
+            if (character.currentLadder != null) {
+                character.Climb(Input.GetAxis("Vertical"));
+            }
+
             if (!character.isBusy) {
 
                 // Movement
@@ -69,9 +74,9 @@ namespace Unimotion {
                 }
 
                 // Jumping
-                if (buttonQueue.Consume("Cross")) {
+                /*if (buttonQueue.Consume("Cross")) {
                     motor.Jump();
-                }
+                }*/
 
                 if (Input.GetKeyDown(KeyCode.F)) {
                     motor.AddForce(transform.forward * 500f);
@@ -104,8 +109,13 @@ namespace Unimotion {
                 }
 
                 // Heal
-                if(buttonQueue.Consume("Square")) {
+                if (buttonQueue.Consume("Square")) {
                     character.Heal();
+                }
+
+                // Interact
+                if (Input.GetButtonDown("Cross")) {
+                    character.Interact();
                 }
             }
 
@@ -130,8 +140,13 @@ namespace Unimotion {
 
             }
 
-            if(transform.position.y < -50f) {
+            if (transform.position.y < -50f) {
                 character.Kill();
+            }
+
+            // Position camera socket when the CharacterMotor is disabled
+            if (motor.enabled == false) {
+                PositionSocket();
             }
         }
 
@@ -188,7 +203,7 @@ namespace Unimotion {
         public void PositionSocket() {
 
             // Get the real target position (add offset)
-            Vector3 realTarget = motor.transform.position + new Vector3(0f, 1f, 0f);
+            Vector3 realTarget = motor.transform.position + new Vector3(0f, 1.5f, 0f);
 
             // Make a vector from mouse/joystick movement
             Vector3 input = Vector3.zero;
@@ -217,9 +232,10 @@ namespace Unimotion {
                 maxDistance = distance;
             }
 
-            // Put the Camera around the player
+            // Put the camera socket around the player
             Vector3 desiredPosition = realTarget - cameraSocket.transform.forward * (maxDistance - 0.1f);
             cameraSocket.transform.position = desiredPosition;
+            FindObjectOfType<GameCamera>().OnSocketPositionChanged(cameraSocket);
 
             // If there is a combat target
             if (character.target != null) {

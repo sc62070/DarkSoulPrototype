@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Switch : Interactable {
 
-    private string[] actions = { "Switch" };
-    public override string[] Actions { get => actions; set => actions = value; }
+    private string description = "Switch";
+    public override string Description { get => description; set => description = value; }
 
     public Switchable switchable;
 
-    public override void DoSelectedAction() {
+    public override void Interact() {
         if(switchable != null) {
             switchable.Switch();
         }

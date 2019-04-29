@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour {
     public RectTransform staminaBar;
     public RectTransform staminaBarFill;
 
+    public GameObject interactionPanel;
+
     public Character character;
 
     void Start() {
@@ -25,6 +27,11 @@ public class UIManager : MonoBehaviour {
 
             staminaBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.stamina / character.maxStamina) * staminaBar.rect.width);
             staminaBarFill.anchoredPosition = Vector2.zero;
+        }
+
+        interactionPanel.SetActive(Interactable.active != null);
+        if(Interactable.active != null) {
+            interactionPanel.GetComponentInChildren<Text>().text = Interactable.active.Description;
         }
         
     }

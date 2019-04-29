@@ -84,6 +84,9 @@ MonoBehaviour:
   isBusy: 0
   isEquipped: 0
   isWeaponDamaging: 0
+  isPhysicsEnabled: 1
+  selectedInteractable: {fileID: 0}
+  currentLadder: {fileID: 0}
   lastAttackMove:
     stateName: 
     type: 0

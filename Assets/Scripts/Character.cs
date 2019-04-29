@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unimotion;
-using Photon.Pun;
+using UnityEngine;
 
 public class Character : MonoBehaviourPun {
 
@@ -27,6 +27,11 @@ public class Character : MonoBehaviourPun {
     public bool isBusy = false;
     public bool isEquipped = false;
     public bool isWeaponDamaging = false;
+    public bool isPhysicsEnabled = true;
+
+    [Header("Status")]
+    public Interactable selectedInteractable;
+    public Ladder currentLadder;
 
     public AttackMove lastAttackMove = null;
     public float lastAttackTimer = 0f;
@@ -52,12 +57,14 @@ public class Character : MonoBehaviourPun {
         audioSource = gameObject.AddComponent<AudioSource>();
 
         motor.OnLand += delegate () {
-            if (motor.velocity.y < -15f) {
-                Damage(30f, -transform.forward);
-            }
+            if (photonView.IsMine) {
+                if (motor.velocity.y < -15f) {
+                    Damage(30f, -transform.forward);
+                }
 
-            photonView.RPC("PlayState", RpcTarget.All, "Land", 0.1f);
-            photonView.RPC("PlaySound", RpcTarget.All, SoundClips.LAND);
+                photonView.RPC("PlayState", RpcTarget.All, "Land", 0.1f);
+                photonView.RPC("PlaySound", RpcTarget.All, SoundClips.LAND);
+            }
         };
 
         RefreshEquipmentGraphics();
@@ -65,12 +72,26 @@ public class Character : MonoBehaviourPun {
 
     // Update is called once per frame
     void Update() {
-
-        motor.canWalk = !isBusy && !isAttacking && !isEvading;
-        motor.canJump = !isBusy && !isAttacking && !isEvading;
-        motor.canTurn = !isBusy && !isAttacking && !isEvading;
-
         if (photonView.IsMine) {
+
+            // Manage ladder climbing
+            motor.enabled = currentLadder == null && isPhysicsEnabled;
+            motor.animator.SetBool("Climbing", currentLadder != null);
+            
+            if(currentLadder != null) {
+                transform.position = currentLadder.transform.position + Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up);
+                transform.forward = currentLadder.transform.forward;
+
+                if(Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up).magnitude > currentLadder.height - 1.75f) {
+                    currentLadder = null;
+                    photonView.RPC("PlayState", RpcTarget.All, "Climb Up", 0.2f);
+                }
+            }
+
+            motor.canWalk = !isBusy && !isAttacking && !isEvading;
+            motor.canJump = !isBusy && !isAttacking && !isEvading;
+            motor.canTurn = !isBusy && !isAttacking && !isEvading;
+
             motor.animator.SetBool("Blocking", isBlocking);
 
             if (!isAttacking) {
@@ -82,36 +103,48 @@ public class Character : MonoBehaviourPun {
 
     void LateUpdate() {
 
-        if (!isAttacking) {
-            timeSinceStaminaConsume += Time.deltaTime;
-            timeSinceStaminaRunout += Time.deltaTime;
+        // Check around for interactables
+        selectedInteractable = null;
+        Interactable[] interactables = FindObjectsOfType<Interactable>();
+        foreach (Interactable i in interactables) {
+            if (Vector3.Distance(transform.position, i.transform.position) < 2f) {
+                selectedInteractable = i;
+                break;
+            }
         }
 
-        // Regenerate stamina
-        if (timeSinceStaminaConsume > 1f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
-            stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
+        if (photonView.IsMine) {
+            if (!isAttacking) {
+                timeSinceStaminaConsume += Time.deltaTime;
+                timeSinceStaminaRunout += Time.deltaTime;
+            }
+
+            // Regenerate stamina
+            if (timeSinceStaminaConsume > 1f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
+                stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
+            }
+
+            // Prevent blocking if evading or blocked
+            if (isBusy || isEvading) {
+                isBlocking = false;
+            }
+
+            // Manage combat-mode
+            if (target == null && !isAttacking) {
+                timeSinceNoTarget += Time.deltaTime;
+            } else {
+                timeSinceNoTarget = 0f;
+            }
+
+            // Manage weapon Damage
+            if (!isWeaponDamaging || !isAttacking) {
+                alreadyDamaged.Clear();
+            }
+
+            inCombat = target != null || timeSinceNoTarget < 4f;
+
+            motor.animator.SetBool("Combat", inCombat);
         }
-
-        // Prevent blocking if evading or blocked
-        if (isBusy || isEvading) {
-            isBlocking = false;
-        }
-
-        // Manage combat-mode
-        if(target == null && !isAttacking) {
-            timeSinceNoTarget += Time.deltaTime;
-        } else {
-            timeSinceNoTarget = 0f;
-        }
-
-        // Manage weapon Damage
-        if (!isWeaponDamaging || !isAttacking) {
-            alreadyDamaged.Clear();
-        }
-
-        inCombat = target != null || timeSinceNoTarget < 4f;
-
-        motor.animator.SetBool("Combat", inCombat);
 
         weaponObject.SetActive(isEquipped);
         weaponBackObject.SetActive(!isEquipped);
@@ -145,12 +178,24 @@ public class Character : MonoBehaviourPun {
 
     [PunRPC]
     public void Stagger() {
-        photonView.RPC("PlayState", RpcTarget.All, "Stagger", 0.2f);
+        if (photonView.IsMine) {
+            photonView.RPC("PlayState", RpcTarget.All, "Stagger", 0.2f);
+        }
     }
 
     [PunRPC]
     public void Flinch() {
-        photonView.RPC("PlayState", RpcTarget.All, "Flinch", 0.2f);
+        if (photonView.IsMine) {
+            photonView.RPC("PlayState", RpcTarget.All, "Flinch", 0.2f);
+        }
+    }
+
+    [PunRPC]
+    public void Flinch(Vector3 knockback) {
+        if (photonView.IsMine) {
+            Flinch();
+            motor.AddForce(knockback);
+        }
     }
 
     public void Evade(Direction direction) {
@@ -184,17 +229,33 @@ public class Character : MonoBehaviourPun {
         }
     }
 
+    public void Interact() {
+        if(selectedInteractable != null) {
+            if(selectedInteractable is Ladder) {
+                currentLadder = (Ladder) selectedInteractable;
+                return;
+            }
+        }
+    }
+
+    public void Climb(float magnitude) {
+        transform.position = transform.position + currentLadder.transform.up * magnitude * Time.deltaTime;
+        motor.animator.SetFloat("Climbing Magnitude", magnitude);
+    }
+
     [PunRPC]
     public void Damage(float q, Vector3 direction) {
-        if (health > 0f) {
-            health -= q;
+        if (photonView.IsMine) {
+            if (health > 0f) {
+                health -= q;
 
-            motor.TurnTowards(-direction, CharacterMotor.TurnBehaviour.Instant);
-            if (health <= 0f) {
-                Kill();
-            } else {
-                //Stagger();
-                Flinch();
+                motor.TurnTowards(-direction, CharacterMotor.TurnBehaviour.Instant);
+                if (health <= 0f) {
+                    Kill();
+                } else {
+                    //Stagger();
+                    Flinch(direction.normalized * 50f);
+                }
             }
         }
     }
@@ -315,6 +376,10 @@ public class Character : MonoBehaviourPun {
         }
 
         if (evt.Equals("swing") && isAttacking) {
+
+            // The animation reached the point in which stamina must be consumed
+            ConsumeStamina(30f * lastAttackMove.damageMultiplier);
+
             string[] clips = { SoundClips.SWING_01, SoundClips.SWING_02, SoundClips.SWING_03, SoundClips.SWING_04 };
             PlaySound(clips[Random.Range(0, clips.Length)]);
         }

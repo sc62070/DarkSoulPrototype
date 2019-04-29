@@ -104,6 +104,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
         SceneManager.LoadScene(targetScene);
     }
 
+    public void Quit() {
+        Application.Quit(0);
+    }
+
 }
 
 [System.Serializable]

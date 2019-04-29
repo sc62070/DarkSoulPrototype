@@ -13,6 +13,7 @@ public class StateBehaviour : StateMachineBehaviour {
     public bool isEvade = false;
     public bool isAttack = false;
     public bool isEquipped = false;
+    public bool isPhysicsEnabled = true;
 
     Animator animator = null;
 
@@ -24,6 +25,7 @@ public class StateBehaviour : StateMachineBehaviour {
         animator.GetComponent<Character>().isEvading = isEvade;
         animator.GetComponent<Character>().isAttacking = isAttack;
         animator.GetComponent<Character>().isEquipped = isEquipped;
+        animator.GetComponent<Character>().isPhysicsEnabled = isPhysicsEnabled;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

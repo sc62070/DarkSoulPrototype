@@ -25,10 +25,17 @@ public class GameCamera : MonoBehaviour {
         /// Fix later...
 
         if(socket != null) {
+            /*transform.position = socket.transform.position;
+            transform.rotation = socket.transform.rotation;*/
+        }
+
+    }
+
+    public void OnSocketPositionChanged(CameraSocket socket) {
+        if(socket == this.socket) {
             transform.position = socket.transform.position;
             transform.rotation = socket.transform.rotation;
         }
-
     }
 
     public static RaycastHit RaycastPastItself(Collider col, Vector3 startPos, Vector3 direction, float lenght, LayerMask mask, QueryTriggerInteraction queryTriggerInteraction) {
