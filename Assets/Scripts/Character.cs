@@ -58,12 +58,16 @@ public class Character : MonoBehaviourPun {
 
         motor.OnLand += delegate () {
             if (photonView.IsMine) {
-                if (motor.velocity.y < -15f) {
-                    Damage(30f, -transform.forward);
-                }
 
-                photonView.RPC("PlayState", RpcTarget.All, "Land", 0.1f);
-                photonView.RPC("PlaySound", RpcTarget.All, SoundClips.LAND);
+                if (motor.velocity.y < -5f) {
+
+                    photonView.RPC("PlayState", RpcTarget.All, "Land", 0.1f);
+                    photonView.RPC("PlaySound", RpcTarget.All, SoundClips.LAND);
+
+                    if (motor.velocity.y < -15f) {
+                        Damage(30f, -transform.forward);
+                    }
+                }
             }
         };
 
