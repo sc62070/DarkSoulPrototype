@@ -7,6 +7,7 @@ public class StateBehaviour : StateMachineBehaviour {
 
     public string identifier = "";
 
+    [Header("Behaviour")]
     public bool useRootMotion = false;
 
     public bool isBusy = false;
@@ -14,6 +15,9 @@ public class StateBehaviour : StateMachineBehaviour {
     public bool isAttack = false;
     public bool isEquipped = false;
     public bool isPhysicsEnabled = true;
+
+    [Header("Visual")]
+    public EquipmentAccomodation equipmentAccomodation = EquipmentAccomodation.Kubold;
 
     Animator animator = null;
 
@@ -26,6 +30,8 @@ public class StateBehaviour : StateMachineBehaviour {
         animator.GetComponent<Character>().isAttacking = isAttack;
         animator.GetComponent<Character>().isEquipped = isEquipped;
         animator.GetComponent<Character>().isPhysicsEnabled = isPhysicsEnabled;
+
+        animator.GetComponent<Character>().Reaccomodate(equipmentAccomodation);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -36,6 +42,7 @@ public class StateBehaviour : StateMachineBehaviour {
     // OnStateMove is called right after Animator.OnAnimatorMove()
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         if (useRootMotion) {
+            //animator.deltaPosition;
             animator.ApplyBuiltinRootMotion();
         }
     }
@@ -56,4 +63,8 @@ public class StateBehaviour : StateMachineBehaviour {
         animator.SetIKPosition(AvatarIKGoal.LeftHand, t.position + t.up * 1.2f + t.forward * 0.3f);*/
     }
 
+}
+
+public enum EquipmentAccomodation {
+    Kubold, Frank, Own
 }

@@ -9,13 +9,20 @@ public class CharacterAI : MonoBehaviour {
     private Character character;
     private CharacterMotor motor;
 
+    public AIState state;
+
+    [Range(0.1f, 1f)]
+    public float combatSpeed = 1f;
+    [Range(0f, 1f)]
+    public float combatAggressiveness = 1f;
+
     void Awake() {
         character = GetComponent<Character>();
         motor = GetComponent<CharacterMotor>();
     }
 
     void Start() {
-
+        StartCoroutine(AIThinkingRoutine());
     }
 
     void Update() {
@@ -54,4 +61,20 @@ public class CharacterAI : MonoBehaviour {
 
     }
 
+    private IEnumerator AIThinkingRoutine() {
+        while (true) {
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+}
+
+public enum AIState {
+    Idle,
+    Patroling,
+    RunningAway,
+    RoundingTarget,
+    AwaitingTargetMove,
+    Attacking
 }

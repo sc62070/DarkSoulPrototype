@@ -414,7 +414,35 @@ public class Character : MonoBehaviourPun {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine && !alreadyDamaged.Contains(characterHit)) {
             alreadyDamaged.Add(characterHit);
             Debug.Log("Trying to damage " + characterHit.name);
-            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
+            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
+        }
+    }
+
+    public void Reaccomodate(EquipmentAccomodation accomodation) {
+        Transform handleR = transform.FindDeepChild("Handle.R");
+        Transform handleL = transform.FindDeepChild("Handle.L");
+
+        switch (accomodation) {
+            case EquipmentAccomodation.Kubold:
+                if (weaponObject != null) {
+                    weaponObject.transform.localRotation = Quaternion.Euler(40f, 0f, 90f);
+                }
+                if(shieldObject != null) {
+                    shieldObject.transform.localRotation = Quaternion.Euler(2.3f, -270f, -90f);
+                }
+                break;
+            case EquipmentAccomodation.Frank:
+                if (weaponObject != null) {
+                    weaponObject.transform.localRotation = Quaternion.Euler(90f, 0f, 90f);
+                }
+                if (shieldObject != null) {
+                    shieldObject.transform.localRotation = Quaternion.Euler(2.3f, -270f, -90f);
+                }
+                break;
+            case EquipmentAccomodation.Own:
+                break;
+            default:
+                break;
         }
     }
 
