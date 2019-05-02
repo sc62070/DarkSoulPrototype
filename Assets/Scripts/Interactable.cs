@@ -11,7 +11,7 @@ public abstract class Interactable : MonoBehaviour {
     private void Awake() {
     }
 
-    public abstract void Interact();
+    public abstract void Interact(Character character);
 
     /*public void SelectNext() {
         selected = Mathf.Clamp(selected + 1, 0, Actions.Length - 1);

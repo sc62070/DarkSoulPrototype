@@ -9,7 +9,7 @@ public class Switch : Interactable {
 
     public Switchable switchable;
 
-    public override void Interact() {
+    public override void Interact(Character character) {
         if(switchable != null) {
             switchable.Switch();
         }

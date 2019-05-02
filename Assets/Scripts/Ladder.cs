@@ -7,7 +7,7 @@ public class Ladder : Interactable {
 
     public float height = 4f;
 
-    public override void Interact() {
+    public override void Interact(Character character) {
 
     }
 

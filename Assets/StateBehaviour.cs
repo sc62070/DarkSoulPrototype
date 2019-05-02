@@ -41,7 +41,7 @@ public class StateBehaviour : StateMachineBehaviour {
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        animator.SetFloat("Curve/Speed", 1f);
+
     }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()

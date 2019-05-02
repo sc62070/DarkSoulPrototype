@@ -245,6 +245,8 @@ public class Character : MonoBehaviourPun {
                 dot = Mathf.Clamp(dot, 0f, currentLadder.height - 1.5f - 0.1f);
                 transform.position = currentLadder.transform.position + currentLadder.transform.up * dot;
                 return;
+            } else {
+                selectedInteractable.Interact(this);
             }
         }
     }
