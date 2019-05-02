@@ -411,9 +411,10 @@ public class Character : MonoBehaviourPun {
 
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
-        if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.5f && photonView.IsMine) {
-            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
+        if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine && !alreadyDamaged.Contains(characterHit)) {
             alreadyDamaged.Add(characterHit);
+            Debug.Log("Trying to damage " + characterHit.name);
+            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
         }
     }
 
