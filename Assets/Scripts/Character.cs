@@ -83,9 +83,12 @@ public class Character : MonoBehaviourPun {
                 transform.position = currentLadder.transform.position + Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up) - currentLadder.transform.forward * distanceFromLadder;
                 transform.forward = currentLadder.transform.forward;
 
-                if(Vector3.Project(transform.position - currentLadder.transform.position, currentLadder.transform.up).magnitude > currentLadder.height - 1.50f) {
+                float dot = Vector3.Dot(transform.position - currentLadder.transform.position, currentLadder.transform.up);
+                if(dot > currentLadder.height - 1.50f) {
                     currentLadder = null;
                     photonView.RPC("PlayState", RpcTarget.All, "Climb Up", 0.2f);
+                } else if (dot < 0f) {
+                    currentLadder = null;
                 }
             }
 
@@ -108,7 +111,11 @@ public class Character : MonoBehaviourPun {
         selectedInteractable = null;
         Interactable[] interactables = FindObjectsOfType<Interactable>();
         foreach (Interactable i in interactables) {
-            if (Vector3.Distance(transform.position, i.transform.position) < 2f) {
+            if (Vector3.Distance(transform.position, i.transform.position) < 2f && !(i is Ladder)) {
+                selectedInteractable = i;
+                break;
+            } else if (i is Ladder && Vector3.Distance(transform.position, i.transform.position + Vector3.Project(transform.position - i.transform.position, i.transform.up)) < 2f) {
+                Debug.Log(Vector3.Distance(transform.position, i.transform.position + Vector3.Project(transform.position - i.transform.position, i.transform.up)));
                 selectedInteractable = i;
                 break;
             }
@@ -195,7 +202,7 @@ public class Character : MonoBehaviourPun {
     public void Flinch(Vector3 knockback) {
         if (photonView.IsMine) {
             Flinch();
-            motor.AddForce(knockback);
+            motor.velocity = knockback;
         }
     }
 
@@ -234,6 +241,9 @@ public class Character : MonoBehaviourPun {
         if(selectedInteractable != null) {
             if(selectedInteractable is Ladder) {
                 currentLadder = (Ladder) selectedInteractable;
+                float dot = Vector3.Dot(transform.position - currentLadder.transform.position, currentLadder.transform.up);
+                dot = Mathf.Clamp(dot, 0f, currentLadder.height - 1.5f - 0.1f);
+                transform.position = currentLadder.transform.position + currentLadder.transform.up * dot;
                 return;
             }
         }
@@ -255,7 +265,7 @@ public class Character : MonoBehaviourPun {
                     Kill();
                 } else {
                     //Stagger();
-                    Flinch(direction.normalized * 50f);
+                    
                 }
             }
         }
@@ -281,6 +291,10 @@ public class Character : MonoBehaviourPun {
 
                     // The incoming attack must succesfully damage this character
                     Damage(q, direction);
+
+                    if(health > 0f) {
+                        Flinch(direction.normalized * 8f);
+                    } 
 
                     string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
                     photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
@@ -314,6 +328,7 @@ public class Character : MonoBehaviourPun {
     }
 
     public void Kill() {
+        motor.animator.SetBool("Character/Dead", true);
         motor.animator.CrossFadeInFixedTime("Die", 0.2f);
         Destroy(GetComponent<Target>());
         OnDie?.Invoke();
@@ -390,7 +405,7 @@ public class Character : MonoBehaviourPun {
 
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
-        if (motor.animator.GetFloat("Damage") > 0.5f && photonView.IsMine) {
+        if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.5f && photonView.IsMine) {
             characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f, characterHit.transform.position - transform.position, photonView.ViewID);
             alreadyDamaged.Add(characterHit);
         }

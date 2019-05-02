@@ -842,7 +842,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves:
-      - name: Curve
+      - name: Curve/Speed
         curve:
           serializedVersion: 2
           curve:
@@ -867,12 +867,30 @@ ModelImporter:
           - serializedVersion: 3
             time: 0.2516469
             value: 1
+            inSlope: 4.8418036
+            outSlope: 4.8418036
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.022186525
+            outWeight: 0.08046685
+          - serializedVersion: 3
+            time: 0.4773653
+            value: 1.4937627
             inSlope: 0
             outSlope: 0
             tangentMode: 0
             weightedMode: 0
-            inWeight: 0.022186525
-            outWeight: 0.13886108
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.7016663
+            value: 1
+            inSlope: -5.403376
+            outSlope: 0.013717852
+            tangentMode: 1
+            weightedMode: 0
+            inWeight: 0.090785466
+            outWeight: 0.9729619
           - serializedVersion: 3
             time: 1
             value: 1
@@ -885,7 +903,7 @@ ModelImporter:
           preInfinity: 2
           postInfinity: 2
           rotationOrder: 4
-      - name: Damage
+      - name: Curve/Damage
         curve:
           serializedVersion: 2
           curve:
@@ -1123,37 +1141,46 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves:
-      - name: Curve
+      - name: Curve/Speed
         curve:
           serializedVersion: 2
           curve:
           - serializedVersion: 3
             time: -0.00090789795
             value: 0.7994001
-            inSlope: -16.637493
-            outSlope: -16.637493
+            inSlope: -27.951946
+            outSlope: -27.951946
             tangentMode: 0
             weightedMode: 0
             inWeight: 0.33333334
-            outWeight: 0.08450299
+            outWeight: 0.057328798
           - serializedVersion: 3
-            time: 0.06358203
-            value: 0.29231974
-            inSlope: 0
-            outSlope: 0
+            time: 0.022347353
+            value: 0.027065143
+            inSlope: -0.027277252
+            outSlope: -0.027277252
             tangentMode: 0
             weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
+            inWeight: 0.64504623
+            outWeight: 0.5920272
           - serializedVersion: 3
-            time: 0.18624415
+            time: 0.15262406
+            value: 0.82959956
+            inSlope: 19.935448
+            outSlope: 19.935448
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.06301584
+            outWeight: 0.028133225
+          - serializedVersion: 3
+            time: 0.47422025
             value: 1
-            inSlope: 0
+            inSlope: -2.257566
             outSlope: 0
-            tangentMode: 0
+            tangentMode: 1
             weightedMode: 0
-            inWeight: 0.38574326
-            outWeight: 0.13886108
+            inWeight: 0.13306671
+            outWeight: 0.33333334
           - serializedVersion: 3
             time: 1
             value: 1
@@ -1166,7 +1193,7 @@ ModelImporter:
           preInfinity: 2
           postInfinity: 2
           rotationOrder: 4
-      - name: Damage
+      - name: Curve/Damage
         curve:
           serializedVersion: 2
           curve:
@@ -3082,7 +3109,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves:
-      - name: Curve
+      - name: Curve/Speed
         curve:
           serializedVersion: 2
           curve:
@@ -3107,7 +3134,7 @@ ModelImporter:
           preInfinity: 2
           postInfinity: 2
           rotationOrder: 4
-      - name: Damage
+      - name: Curve/Damage
         curve:
           serializedVersion: 2
           curve:
