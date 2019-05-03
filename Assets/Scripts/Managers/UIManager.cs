@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour {
     void LateUpdate() {
 
         if(character != null) {
-            healthBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.health / character.maxHealth) * healthBar.rect.width);
+            healthBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.health / character.MaxHealth) * healthBar.rect.width);
             healthBarFill.anchoredPosition = Vector2.zero;
 
             staminaBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.stamina / character.maxStamina) * staminaBar.rect.width);

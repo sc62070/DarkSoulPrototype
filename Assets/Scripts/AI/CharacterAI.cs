@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unimotion;
 using UnityEngine;
 using UnityEngine.AI;
+using Unimotion;
 
-public class CharacterAI : MonoBehaviour {
+public abstract class CharacterAI : MonoBehaviour {
 
     private Character character;
     private CharacterMotor motor;
@@ -88,11 +88,10 @@ public class CharacterAI : MonoBehaviour {
                     }
 
                     if (Vector3.Distance(transform.position, character.target.transform.position) < 2f) {
-                        character.Attack(AttackType.Light);
+                        character.Attack(PickAttack());
                         state = AIState.RoundingTarget;
                     }
                     break;
-
             }
         }
 
@@ -105,14 +104,14 @@ public class CharacterAI : MonoBehaviour {
             // Logic to change states
             switch (state) {
                 case AIState.Idle:
-                    if(character.target != null) {
+                    if (character.target != null) {
                         state = AIState.ChasingTarget;
                     }
                     break;
                 case AIState.ChasingTarget:
 
                     // If close enough to target, start rounding him
-                    if(Vector3.Distance(transform.position, character.target.transform.position) <= 4f) {
+                    if (Vector3.Distance(transform.position, character.target.transform.position) <= 4f) {
                         state = AIState.RoundingTarget;
                     }
                     break;
@@ -133,7 +132,7 @@ public class CharacterAI : MonoBehaviour {
         while (true) {
 
             yield return new WaitForSeconds(2f);
-            float[] values = new float[] { 1f, 0f, -1f};
+            float[] values = new float[] { 1f, 0f, -1f };
             roundDirectionChangeMultiplier = values[Random.Range(0, values.Length)];
 
             yield return new WaitForEndOfFrame();
@@ -142,8 +141,8 @@ public class CharacterAI : MonoBehaviour {
 
     private IEnumerator AIAttackRoutine() {
         while (true) {
-            if(state == AIState.RoundingTarget) {
-                yield return new WaitForSeconds(Random.Range(3f, 8f));
+            if (state == AIState.RoundingTarget) {
+                yield return new WaitForSeconds(Random.Range(1f * combatAggressiveness, 4f * combatAggressiveness));
 
                 if (character.target != null) {
                     state = AIState.Attacking;
@@ -160,24 +159,16 @@ public class CharacterAI : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(1f);
 
-            if (character.target != null && character.stamina / character.maxStamina > 0.8f){
+            if (character.target != null && character.stamina / character.maxStamina > 0.8f) {
                 shouldBlock = true;
             } else {
                 shouldBlock = false;
             }
-            
+
             yield return new WaitForEndOfFrame();
         }
     }
 
-}
+    public abstract AttackMove PickAttack();
 
-public enum AIState {
-    Idle,
-    Patroling,
-    RunningAway,
-    ChasingTarget,
-    RoundingTarget,
-    AwaitingTargetMove,
-    Attacking
 }

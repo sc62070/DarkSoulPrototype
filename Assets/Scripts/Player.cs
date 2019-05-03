@@ -281,7 +281,7 @@ namespace Unimotion {
             yield return new WaitForSeconds(4f);
             transform.position = Vector3.zero;
             transform.gameObject.AddComponent<Target>();
-            character.health = character.maxHealth;
+            character.health = character.MaxHealth;
             character.target = null;
         }
 

@@ -8,10 +8,12 @@ public class Character : MonoBehaviourPun {
 
     [Header("Basic")]
     public float health = 100f;
-    public float maxHealth = 100f;
+    public float MaxHealth { get { return stats.vitality / 99f * 2000f; } }
 
     public float stamina = 100f;
     public float maxStamina = 100f;
+
+    public Stats stats;
 
     [Header("Equipment")]
     public Weapon weapon;
@@ -55,6 +57,8 @@ public class Character : MonoBehaviourPun {
         motor = GetComponent<CharacterMotor>();
         capsule = GetComponent<CapsuleCollider>();
         audioSource = gameObject.AddComponent<AudioSource>();
+
+        health = MaxHealth;
 
         motor.OnLand += delegate () {
             if (photonView.IsMine) {
@@ -187,6 +191,24 @@ public class Character : MonoBehaviourPun {
         }
 
     }
+
+    public void Attack(AttackMove move) {
+
+        if (photonView.IsMine && !isBusy && !isAttacking && stamina > 0f) {
+            isBlocking = false;
+            isEvading = false;
+
+            ToggleCombat();
+
+            lastAttackTimer = 0.5f;
+            lastAttackMove = move;
+
+            photonView.RPC("PlayState", RpcTarget.All, move.stateName, 0.2f);
+
+        }
+
+    }
+
 
     [PunRPC]
     public void Stagger() {
@@ -381,7 +403,7 @@ public class Character : MonoBehaviourPun {
             } else if (evt.Equals("cancelBlockMovement")) {
                 //isBusy = false;
             } else if (evt.Equals("drink")) {
-                health = Mathf.Clamp(health + 60f, 0f, maxHealth);
+                health = Mathf.Clamp(health + 60f, 0f, MaxHealth);
                 GetComponent<Inventory>().items.RemoveAt(0);
             } else if (evt.Equals("startWeaponDamage")) {
                 alreadyDamaged.Clear();
@@ -462,7 +484,7 @@ public class Character : MonoBehaviourPun {
 
         if (weapon != null) {
             weaponObject = Instantiate(weapon.prefab);
-            weaponObject.transform.localScale = Vector3.one;
+            weaponObject.transform.localScale = Vector3.one * transform.localScale.x;
             weaponObject.transform.parent = handleR;
             weaponObject.transform.localPosition = Vector3.zero;
             weaponObject.transform.localRotation = Quaternion.Euler(40f, 0f, 90f);
@@ -476,7 +498,7 @@ public class Character : MonoBehaviourPun {
 
         if (shield != null) {
             shieldObject = Instantiate(shield.prefab);
-            shieldObject.transform.localScale = Vector3.one;
+            shieldObject.transform.localScale = Vector3.one * transform.localScale.x; ;
             shieldObject.transform.parent = handleL;
             shieldObject.transform.localPosition = Vector3.zero;
             shieldObject.transform.localRotation = Quaternion.Euler(2.3f, -270f, -90f);
@@ -507,6 +529,21 @@ public class AttackMove {
     public AttackType type;
     public float damageMultiplier = 1f;
     public AttackMove nextAttack;
+
+    public AttackMove() {
+        
+    }
+
+    public AttackMove(string stateName, AttackType type, float damageMultiplier) {
+        this.stateName = stateName;
+        this.type = type;
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    public AttackMove(string stateName, float damageMultiplier) {
+        this.stateName = stateName;
+        this.damageMultiplier = damageMultiplier;
+    }
 }
 
 public class AttackMoves {
@@ -533,4 +570,11 @@ public class AttackMoves {
         damageMultiplier = 1f,
         nextAttack = slashRL
     };
+}
+
+[System.Serializable]
+public class Stats {
+    public int vitality = 5;
+    public int endurance = 5;
+    public int strength = 5;
 }

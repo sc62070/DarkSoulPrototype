@@ -350,7 +350,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Soulslike
+  m_Text: "EL NI\xD1O AZTECA"
 --- !u!222 &492336714
 CanvasRenderer:
   m_ObjectHideFlags: 0
