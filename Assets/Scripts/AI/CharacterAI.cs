@@ -83,7 +83,7 @@ public abstract class CharacterAI : MonoBehaviour {
                 case AIState.Attacking:
 
                     /// Chase target
-                    if (canReach) {
+                    if (canReach && path.corners.Length >= 2) {
                         motor.Walk((path.corners[1] - transform.position).normalized);
                     }
 
