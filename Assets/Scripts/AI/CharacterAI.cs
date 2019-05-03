@@ -20,12 +20,12 @@ public abstract class CharacterAI : MonoBehaviour {
 
     private bool shouldBlock = false;
 
-    void Awake() {
+    public void Awake() {
         character = GetComponent<Character>();
         motor = GetComponent<CharacterMotor>();
     }
 
-    void Start() {
+    public void Start() {
         StartCoroutine(AIThinkingRoutine());
         StartCoroutine(AIDirectionChangeRoutine());
         StartCoroutine(AIBlockRoutine());
@@ -69,7 +69,7 @@ public abstract class CharacterAI : MonoBehaviour {
                         if (Vector3.Distance(transform.position, character.target.transform.position) > 2f) {
 
                             /// Chase target
-                            if (canReach) {
+                            if (canReach && path.corners.Length >= 2) {
                                 motor.Walk((path.corners[1] - transform.position).normalized);
                             }
                         } else {

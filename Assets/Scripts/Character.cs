@@ -49,6 +49,7 @@ public class Character : MonoBehaviourPun {
     private float timeSinceStaminaConsume = 0f;
     private float timeSinceStaminaRunout = 0f;
     private float timeSinceNoTarget = 60f;
+    private float timeSinceLastDamage = 60f;
 
     // Graphics
     GameObject weaponObject, shieldObject, weaponBackObject, shieldBackObject;
@@ -109,6 +110,9 @@ public class Character : MonoBehaviourPun {
             if (!isAttacking) {
                 lastAttackTimer -= Time.deltaTime;
             }
+
+            // Manage timers
+            timeSinceLastDamage += Time.deltaTime;
         }
 
     }
@@ -153,9 +157,9 @@ public class Character : MonoBehaviourPun {
             }
 
             // Manage weapon Damage
-            if (!isWeaponDamaging || !isAttacking) {
+            /*if (!isWeaponDamaging || !isAttacking) {
                 alreadyDamaged.Clear();
-            }
+            }*/
 
             inCombat = target != null || timeSinceNoTarget < 4f;
 
@@ -208,7 +212,6 @@ public class Character : MonoBehaviourPun {
         }
 
     }
-
 
     [PunRPC]
     public void Stagger() {
@@ -288,6 +291,8 @@ public class Character : MonoBehaviourPun {
             if (health > 0f) {
                 health -= q;
 
+                timeSinceLastDamage = 0f;
+
                 motor.TurnTowards(-direction, CharacterMotor.TurnBehaviour.Instant);
                 if (health <= 0f) {
                     Kill();
@@ -304,7 +309,7 @@ public class Character : MonoBehaviourPun {
         if (photonView.IsMine) {
             Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
 
-            if (!isEvading) {
+            if (!isEvading && timeSinceLastDamage > 0.5f) {
                 if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
 
                     // This character blocked the incoming attack
@@ -406,10 +411,8 @@ public class Character : MonoBehaviourPun {
                 health = Mathf.Clamp(health + 60f, 0f, MaxHealth);
                 GetComponent<Inventory>().items.RemoveAt(0);
             } else if (evt.Equals("startWeaponDamage")) {
-                alreadyDamaged.Clear();
                 isWeaponDamaging = true;
             } else if (evt.Equals("stopWeaponDamage")) {
-                alreadyDamaged.Clear();
                 isWeaponDamaging = false;
             }
         }
@@ -429,12 +432,9 @@ public class Character : MonoBehaviourPun {
         }
     }
 
-    public HashSet<Character> alreadyDamaged = new HashSet<Character>();
-
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
-        if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine && !alreadyDamaged.Contains(characterHit)) {
-            alreadyDamaged.Add(characterHit);
+        if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
             Debug.Log("Trying to damage " + characterHit.name);
             characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
         }

@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             localPlayer.transform.rotation = Quaternion.identity;
 
             FindObjectOfType<UIManager>().character = localPlayer.GetComponent<Character>();
+            Unimotion.Player.main = localPlayer;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

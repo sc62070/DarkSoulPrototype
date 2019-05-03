@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Unimotion {
     public class Player : MonoBehaviourPun {
 
+        public static Player main;
+
         Character character;
         CharacterMotor motor;
         Animator animator;
