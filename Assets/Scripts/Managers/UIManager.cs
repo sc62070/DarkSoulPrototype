@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
     [Header("Player")]
-    public RectTransform healthBar;
-    public RectTransform healthBarFill;
+    public Bar healthBar;
 
-    public RectTransform staminaBar;
-    public RectTransform staminaBarFill;
+    public Bar staminaBar;
+
+    public Bar poiseBar;
 
     [Header("Boss")]
     public RectTransform bossHealthBar;
@@ -28,11 +28,9 @@ public class UIManager : MonoBehaviour {
     void LateUpdate() {
 
         if(character != null) {
-            healthBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.health / character.MaxHealth) * healthBar.rect.width);
-            healthBarFill.anchoredPosition = Vector2.zero;
-
-            staminaBarFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (character.stamina / character.maxStamina) * staminaBar.rect.width);
-            staminaBarFill.anchoredPosition = Vector2.zero;
+            healthBar.SetValue(character.health / character.MaxHealth);
+            staminaBar.SetValue(character.stamina / character.maxStamina);
+            poiseBar.SetValue(character.poise / 100f);
         }
 
         bossHealthBar.gameObject.SetActive(boss != null && boss.health > 0f && boss.target != null && boss.target.gameObject == Unimotion.Player.main.gameObject);

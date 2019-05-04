@@ -13,6 +13,8 @@ public class Character : MonoBehaviourPun {
     public float stamina = 100f;
     public float maxStamina = 100f;
 
+    public float poise = 100f;
+
     public Stats stats;
 
     [Header("Equipment")]
@@ -104,6 +106,12 @@ public class Character : MonoBehaviourPun {
             motor.canWalk = !isBusy && !isAttacking && !isEvading;
             motor.canJump = !isBusy && !isAttacking && !isEvading;
             motor.canTurn = !isBusy && !isAttacking && !isEvading;
+
+            // Manage poise
+            if(poise <= 0f) {
+                Flinch();
+                poise = 100f;
+            }
 
             motor.animator.SetBool("Blocking", isBlocking);
 
@@ -326,7 +334,8 @@ public class Character : MonoBehaviourPun {
                     Damage(q, direction);
 
                     if(health > 0f) {
-                        Flinch(direction.normalized * 8f);
+                        //Flinch(direction.normalized * 8f);
+                        poise -= q;
                     } 
 
                     string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
@@ -408,7 +417,7 @@ public class Character : MonoBehaviourPun {
             } else if (evt.Equals("cancelBlockMovement")) {
                 //isBusy = false;
             } else if (evt.Equals("drink")) {
-                health = Mathf.Clamp(health + 60f, 0f, MaxHealth);
+                health = Mathf.Clamp(health + 120f, 0f, MaxHealth);
                 GetComponent<Inventory>().items.RemoveAt(0);
             } else if (evt.Equals("startWeaponDamage")) {
                 isWeaponDamaging = true;
@@ -436,7 +445,7 @@ public class Character : MonoBehaviourPun {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
             Debug.Log("Trying to damage " + characterHit.name);
-            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, 35f * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
+            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, (35f + 10f * stats.strength) * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
         }
     }
 

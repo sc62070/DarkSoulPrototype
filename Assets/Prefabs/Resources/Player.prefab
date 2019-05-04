@@ -74,8 +74,9 @@ MonoBehaviour:
   health: 200
   stamina: 100
   maxStamina: 100
+  poise: 100
   stats:
-    vitality: 5
+    vitality: 10
     endurance: 5
     strength: 5
   weapon: {fileID: 11400000, guid: a460dde338b2aec4d8580720f1af5ac2, type: 2}
@@ -110,7 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 11400000, guid: ad10642dc652833499e31de6b1f7bbae, type: 2}
   - {fileID: 11400000, guid: ad10642dc652833499e31de6b1f7bbae, type: 2}
   - {fileID: 11400000, guid: ad10642dc652833499e31de6b1f7bbae, type: 2}
   - {fileID: 11400000, guid: ad10642dc652833499e31de6b1f7bbae, type: 2}
@@ -312,18 +312,12 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 1
     Name: Stuck
-  - Type: 1
-    SynchronizeType: 0
-    Name: Curve
   - Type: 4
     SynchronizeType: 1
     Name: Blocking
   - Type: 4
     SynchronizeType: 1
     Name: Combat
-  - Type: 1
-    SynchronizeType: 0
-    Name: Damage
   - Type: 4
     SynchronizeType: 1
     Name: Climbing
