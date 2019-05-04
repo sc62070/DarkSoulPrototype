@@ -889,7 +889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4765457767852056, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 4765457767852056, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -897,7 +897,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4765457767852056, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 4765457767852056, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
       propertyPath: m_LocalRotation.x
@@ -936,40 +936,10 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 2643455756298521884, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: InstantiationId
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 3729584334918360885, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
         type: 3}
-      propertyPath: health
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 3729584334918360885, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: maxHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8185136448522240940, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: combatSpeed
-      value: 0.5
+      propertyPath: stats.vitality
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
@@ -1792,7 +1762,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17606
+  m_Name: pb_Mesh122336
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1965,7 +1935,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh102826
+  m_Name: pb_Mesh122276
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2221,7 +2191,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17518
+  m_Name: pb_Mesh121974
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3503,7 +3473,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17478
+  m_Name: pb_Mesh121724
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3836,20 +3806,10 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
+    - target: {fileID: 95026912858024326, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3676284036545639478, guid: f4cfb7f47fcf30849a172ebe2197c9a1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
+      propertyPath: m_WarningMessage
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4cfb7f47fcf30849a172ebe2197c9a1, type: 3}
@@ -7104,9 +7064,10 @@ MonoBehaviour:
   health: 2000
   stamina: 100
   maxStamina: 100
+  poise: 100
   stats:
-    vitality: 50
-    endurance: 5
+    vitality: 70
+    endurance: 50
     strength: 5
   weapon: {fileID: 11400000, guid: a460dde338b2aec4d8580720f1af5ac2, type: 2}
   shield: {fileID: 11400000, guid: 7d22825457911d6408cdb8261cb16359, type: 2}

@@ -423,6 +423,15 @@ public class Character : MonoBehaviourPun {
                 isWeaponDamaging = true;
             } else if (evt.Equals("stopWeaponDamage")) {
                 isWeaponDamaging = false;
+            } else if (evt.Equals("correctDirection")) {
+                if(target != null) {
+
+                    // Hacerlo en LadeUpdate con un booleano o algo asi
+
+                    //motor.TurnTowards(target.transform.position - transform.position, CharacterMotor.TurnBehaviour.Instant);
+                    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, -motor.GetGravity());
+                    transform.position = transform.position + transform.up * 2f;
+                }
             }
         }
 
