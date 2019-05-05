@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Unimotion;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class StateBehaviour : StateMachineBehaviour {
-
-    public string identifier = "";
+    public static int currentStateHash = 0;
 
     [Header("Behaviour")]
     public bool useRootMotion = false;
@@ -22,19 +22,24 @@ public class StateBehaviour : StateMachineBehaviour {
 
     Animator animator = null;
     CharacterMotor motor;
+    Character character;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         this.animator = animator;
         this.motor = animator.GetComponent<CharacterMotor>();
+        this.character = animator.GetComponent<Character>();
 
-        animator.GetComponent<Character>().isBusy = isBusy;
-        animator.GetComponent<Character>().isEvading = isEvade;
-        animator.GetComponent<Character>().isAttacking = isAttack;
-        animator.GetComponent<Character>().isEquipped = isEquipped;
-        animator.GetComponent<Character>().isPhysicsEnabled = isPhysicsEnabled;
+        Debug.Log(stateInfo.shortNameHash);
+        currentStateHash = stateInfo.shortNameHash;
 
-        animator.GetComponent<Character>().Reaccomodate(equipmentAccomodation);
+        character.isBusy = isBusy;
+        character.isEvading = isEvade;
+        character.isAttacking = isAttack;
+        character.isEquipped = isEquipped;
+        character.isPhysicsEnabled = isPhysicsEnabled;
+
+        character.Reaccomodate(equipmentAccomodation);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -44,11 +49,16 @@ public class StateBehaviour : StateMachineBehaviour {
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (useRootMotion) {
+        if (useRootMotion && stateInfo.shortNameHash == currentStateHash) {
+                animator.ApplyBuiltinRootMotion();
             //animator.deltaPosition;
-            animator.ApplyBuiltinRootMotion();
+            
         }
-        motor.Move(animator.transform.rotation * constantMovement * Time.deltaTime);
+
+        if (animator.GetNextAnimatorStateInfo(0).shortNameHash == 0 || animator.GetNextAnimatorStateInfo(0).shortNameHash == stateInfo.shortNameHash) {
+            motor.Move(animator.transform.rotation * constantMovement * Time.deltaTime);
+        }
+            
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

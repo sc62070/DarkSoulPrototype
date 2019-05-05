@@ -142,7 +142,7 @@ public class Character : MonoBehaviourPun {
                 selectedInteractable = i;
                 break;
             } else if (i is Ladder && Vector3.Distance(transform.position, i.transform.position + Vector3.Project(transform.position - i.transform.position, i.transform.up)) < 2f) {
-                Debug.Log(Vector3.Distance(transform.position, i.transform.position + Vector3.Project(transform.position - i.transform.position, i.transform.up)));
+                //Debug.Log(Vector3.Distance(transform.position, i.transform.position + Vector3.Project(transform.position - i.transform.position, i.transform.up)));
                 selectedInteractable = i;
                 break;
             }
