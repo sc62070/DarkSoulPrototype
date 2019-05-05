@@ -53,6 +53,8 @@ public class Character : MonoBehaviourPun {
     private float timeSinceNoTarget = 60f;
     private float timeSinceLastDamage = 60f;
 
+    private Quaternion? directionCorrectionRotation;
+
     // Graphics
     GameObject weaponObject, shieldObject, weaponBackObject, shieldBackObject;
 
@@ -107,8 +109,13 @@ public class Character : MonoBehaviourPun {
             motor.canJump = !isBusy && !isAttacking && !isEvading;
             motor.canTurn = !isBusy && !isAttacking && !isEvading;
 
+            // Turn torwards target
+            if(target != null && motor.canTurn) {
+                motor.TurnTowards((target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Normal);
+            }
+
             // Manage poise
-            if(poise <= 0f) {
+            if (poise <= 0f) {
                 Flinch();
                 poise = 100f;
             }
@@ -162,6 +169,17 @@ public class Character : MonoBehaviourPun {
                 timeSinceNoTarget += Time.deltaTime;
             } else {
                 timeSinceNoTarget = 0f;
+            }
+
+            // Manage direction correction
+            if (directionCorrectionRotation != null) {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, directionCorrectionRotation.Value, 400f * Time.deltaTime);
+                if(transform.rotation.AlmostEquals(directionCorrectionRotation.Value, 0.1f) || !isAttacking) {
+                    directionCorrectionRotation = null;
+                }
+
+                /*transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, -motor.GetGravity());
+                directionCorrectionRotation = null;*/
             }
 
             // Manage weapon Damage
@@ -302,6 +320,7 @@ public class Character : MonoBehaviourPun {
                 timeSinceLastDamage = 0f;
 
                 motor.TurnTowards(-direction, CharacterMotor.TurnBehaviour.Instant);
+
                 if (health <= 0f) {
                     Kill();
                 } else {
@@ -315,19 +334,28 @@ public class Character : MonoBehaviourPun {
     [PunRPC]
     public void AttemptDamage(float q, Vector3 direction, int attackerViewId) {
         if (photonView.IsMine) {
+
             Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
 
             if (!isEvading && timeSinceLastDamage > 0.5f) {
+
+                Debug.Log(attacker.gameObject.name + " attempted damage on " + gameObject.name);
+
                 if (isBlocking && Vector3.Angle(transform.forward, attacker.transform.forward) > 90f) {
 
                     // This character blocked the incoming attack
-                    attacker.photonView.RPC("Stagger", RpcTarget.All);
                     photonView.RPC("PlayState", RpcTarget.All, "Block Hit", 0.2f);
 
                     string[] clips = { SoundClips.BLOCK_01, SoundClips.BLOCK_02 };
                     photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
 
                     ConsumeStamina(q);
+
+                    timeSinceLastDamage = 0f;
+
+                    // Knockback for blocking
+                    Debug.Log("Knockbacking for " + (direction.normalized * 10f).magnitude);
+                    motor.velocity = direction.normalized * 10f;
                 } else {
 
                     // The incoming attack must succesfully damage this character
@@ -425,12 +453,7 @@ public class Character : MonoBehaviourPun {
                 isWeaponDamaging = false;
             } else if (evt.Equals("correctDirection")) {
                 if(target != null) {
-
-                    // Hacerlo en LadeUpdate con un booleano o algo asi
-
-                    //motor.TurnTowards(target.transform.position - transform.position, CharacterMotor.TurnBehaviour.Instant);
-                    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, -motor.GetGravity());
-                    transform.position = transform.position + transform.up * 2f;
+                    directionCorrectionRotation = Quaternion.LookRotation(target.transform.position - transform.position, -motor.GetGravity());
                 }
             }
         }
@@ -453,7 +476,7 @@ public class Character : MonoBehaviourPun {
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
-            Debug.Log("Trying to damage " + characterHit.name);
+            //Debug.Log(gameObject.name + " is trying to damage " + characterHit.name);
             characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, (35f + 10f * stats.strength) * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
         }
     }

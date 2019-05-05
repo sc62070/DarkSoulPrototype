@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    [Header("Components")]
+    public GameObject mainMenu;
+    public GameObject ui;
+   
     [Header("Player")]
     public Bar healthBar;
-
     public Bar staminaBar;
-
     public Bar poiseBar;
 
     [Header("Boss")]
@@ -21,8 +23,9 @@ public class UIManager : MonoBehaviour {
     public Character character;
     public Character boss;
 
-    void Start() {
-        
+    void Awake() {
+        mainMenu.SetActive(true);
+        ui.SetActive(true);
     }
 
     void LateUpdate() {

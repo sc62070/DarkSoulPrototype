@@ -51,7 +51,7 @@ public abstract class CharacterAI : MonoBehaviour {
             NavMeshPath path = new NavMeshPath();
 
             if (character.target != null) {
-                motor.TurnTowards((character.target.transform.position - transform.position));
+                //motor.TurnTowards((character.target.transform.position - transform.position));
 
                 character.Block(shouldBlock);
 

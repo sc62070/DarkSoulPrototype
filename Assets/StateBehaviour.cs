@@ -18,12 +18,15 @@ public class StateBehaviour : StateMachineBehaviour {
 
     [Header("Visual")]
     public EquipmentAccomodation equipmentAccomodation = EquipmentAccomodation.Kubold;
+    public Vector3 constantMovement;
 
     Animator animator = null;
+    CharacterMotor motor;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         this.animator = animator;
+        this.motor = animator.GetComponent<CharacterMotor>();
 
         animator.GetComponent<Character>().isBusy = isBusy;
         animator.GetComponent<Character>().isEvading = isEvade;
@@ -45,6 +48,7 @@ public class StateBehaviour : StateMachineBehaviour {
             //animator.deltaPosition;
             animator.ApplyBuiltinRootMotion();
         }
+        motor.Move(animator.transform.rotation * constantMovement * Time.deltaTime);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

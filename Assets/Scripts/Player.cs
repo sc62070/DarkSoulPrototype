@@ -72,7 +72,11 @@ namespace Unimotion {
                 // Movement
                 if (inputMagnitude > 0.05f) {
                     motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
-                    motor.TurnTowards(inputVector);
+
+                    // Only turn if the character has no target
+                    if(character.target == null) {
+                        motor.TurnTowards(inputVector);
+                    }
                 }
 
                 // Jumping
@@ -251,7 +255,7 @@ namespace Unimotion {
 
                 // Look at the target
                 Camera.main.transform.rotation = Quaternion.LookRotation((character.target.transform.position - Camera.main.transform.position).normalized, -motor.GetGravity().normalized);
-                motor.TurnTowards((character.target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Instant);
+                
             }
 
             // Correct camera rotation
