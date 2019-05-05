@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-    [Header("Components")]
+    [Header("Sections")]
+    public GameObject main;
     public GameObject mainMenu;
     public GameObject ui;
    
@@ -18,12 +19,16 @@ public class UIManager : MonoBehaviour {
     public RectTransform bossHealthBar;
     public RectTransform bossHealthBarFill;
 
+    [Header("Configuration")]
+    public UIComponentReferences componentReferences;
+
     public GameObject interactionPanel;
 
     public Character character;
     public Character boss;
 
     void Awake() {
+        main.SetActive(true);
         mainMenu.SetActive(true);
         ui.SetActive(true);
     }
@@ -48,4 +53,15 @@ public class UIManager : MonoBehaviour {
         }
         
     }
+
+    public static void Dialog(string text) {
+        UIManager manager = FindObjectOfType<UIManager>();
+        GameObject o = Instantiate(manager.componentReferences.dialog, manager.mainMenu.transform, false);
+        o.GetComponent<Dialog>().SetText(text);
+    }
+}
+
+[System.Serializable]
+public class UIComponentReferences {
+    public GameObject dialog;
 }

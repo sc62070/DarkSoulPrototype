@@ -30,7 +30,7 @@ public class StateBehaviour : StateMachineBehaviour {
         this.motor = animator.GetComponent<CharacterMotor>();
         this.character = animator.GetComponent<Character>();
 
-        Debug.Log(stateInfo.shortNameHash);
+        //Debug.Log(stateInfo.shortNameHash);
         currentStateHash = stateInfo.shortNameHash;
 
         character.isBusy = isBusy;
@@ -49,7 +49,10 @@ public class StateBehaviour : StateMachineBehaviour {
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (useRootMotion && stateInfo.shortNameHash == currentStateHash) {
+
+
+        //                  (                       vvvv Maybe deleting this could solve the bug?
+        if (useRootMotion/* && stateInfo.shortNameHash == currentStateHash*/) {
                 animator.ApplyBuiltinRootMotion();
             //animator.deltaPosition;
             

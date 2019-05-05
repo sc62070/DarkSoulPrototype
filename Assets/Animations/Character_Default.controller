@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 1
   isEvade: 0
@@ -50,6 +49,48 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-8224516842813821120
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useRootMotion: 1
+  isBusy: 1
+  isEvade: 0
+  isAttack: 0
+  isEquipped: 1
+  isPhysicsEnabled: 1
+  equipmentAccomodation: 0
+  constantMovement: {x: 0, y: 0, z: 0}
+--- !u!1101 &-7784368398187329338
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 1102303051577564044}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.8333333
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &-7168320942260445263
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -106,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 0
   isEvade: 0
@@ -181,7 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -202,7 +241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 0
   isEvade: 0
@@ -223,7 +261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -231,6 +268,26 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   equipmentAccomodation: 1
+  constantMovement: {x: 0, y: 0, z: 0}
+--- !u!114 &-2085888027103611532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useRootMotion: 1
+  isBusy: 1
+  isEvade: 0
+  isAttack: 0
+  isEquipped: 1
+  isPhysicsEnabled: 1
+  equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &-1850329382827598188
 AnimatorStateTransition:
@@ -294,7 +351,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 0
   isEvade: 0
@@ -479,7 +535,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: Grounded Combat
   useRootMotion: 0
   isBusy: 0
   isEvade: 0
@@ -500,7 +555,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -521,7 +575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: Flinch
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -542,7 +595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 0
   isEvade: 0
@@ -563,7 +615,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 0
   isEvade: 0
@@ -584,15 +635,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   isBusy: 0
   isEvade: 1
   isAttack: 0
   isEquipped: 0
   isPhysicsEnabled: 1
   equipmentAccomodation: 0
-  constantMovement: {x: 0, y: 0, z: 0}
+  constantMovement: {x: -6, y: 0, z: 0}
 --- !u!114 &114485123813135492
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -605,7 +655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: Slash R
   useRootMotion: 1
   isBusy: 0
   isEvade: 0
@@ -626,7 +675,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -647,7 +695,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 0
   isEvade: 0
@@ -668,15 +715,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   isBusy: 0
   isEvade: 1
   isAttack: 0
-  isEquipped: 0
+  isEquipped: 1
   isPhysicsEnabled: 1
   equipmentAccomodation: 0
-  constantMovement: {x: 0, y: 0, z: 0}
+  constantMovement: {x: 0, y: 0, z: -6}
 --- !u!114 &114530976982285354
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -689,7 +735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 0
   isEvade: 1
@@ -710,15 +755,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   isBusy: 0
   isEvade: 1
   isAttack: 0
   isEquipped: 0
   isPhysicsEnabled: 1
   equipmentAccomodation: 0
-  constantMovement: {x: 0, y: 0, z: 0}
+  constantMovement: {x: 6, y: 0, z: 0}
 --- !u!114 &114603944038200292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -731,7 +775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -752,7 +795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 0
   isEvade: 0
@@ -773,7 +815,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 1
   isBusy: 1
   isEvade: 0
@@ -914,7 +955,7 @@ BlendTree:
     m_Motion: {fileID: 7400006, guid: 84fe9ed9004c1d04ea82b2d5e7ce9bc3, type: 3}
     m_Threshold: 0.6944444
     m_Position: {x: 0, y: 1.5}
-    m_TimeScale: 0.8
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Input/Forward
     m_Mirror: 0
@@ -934,6 +975,62 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 2
+--- !u!1102 &211238329345277534
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Dodge Land
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: 8295446417448342330}
+  m_StateMachineBehaviours:
+  - {fileID: -8224516842813821120}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400004, guid: 69bfea9c0150faf4f8f3c2851a87ec5c, type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &992481156296991134
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stun
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: -7784368398187329338}
+  m_StateMachineBehaviours:
+  - {fileID: -2085888027103611532}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 5f03974295a3e12448cca83860511fc4, type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &1101002963432191884
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1734,28 +1831,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!1101 &1101658301034193326
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 1102303051577564044}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.5
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!1101 &1101675633645606378
 AnimatorStateTransition:
   m_ObjectHideFlags: 3
@@ -2002,7 +2077,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0.5286418
   m_TransitionOffset: 0
   m_ExitTime: 0.7
   m_HasExitTime: 1
@@ -2223,10 +2298,10 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dodge Back
-  m_Speed: 0.7
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: 1101658301034193326}
+  - {fileID: 8531932241684259759}
   m_StateMachineBehaviours:
   - {fileID: 114509556097134784}
   m_Position: {x: 50, y: 50, z: 0}
@@ -2237,7 +2312,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0b6af583aad3c944ba799812d912ef7e, type: 3}
+  m_Motion: {fileID: 7400018, guid: 84fe9ed9004c1d04ea82b2d5e7ce9bc3, type: 3}
   m_Tag: 
   m_SpeedParameter: Input/Forward
   m_MirrorParameter: 
@@ -2720,16 +2795,16 @@ AnimatorStateMachine:
     m_Position: {x: 370, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102857552229611088}
-    m_Position: {x: 370, y: -10, z: 0}
+    m_Position: {x: 370, y: -130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102092893384532322}
-    m_Position: {x: 370, y: 40, z: 0}
+    m_Position: {x: 370, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102045435835879634}
-    m_Position: {x: 370, y: 90, z: 0}
+    m_Position: {x: 370, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102278011173837848}
-    m_Position: {x: 370, y: 140, z: 0}
+    m_Position: {x: 370, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8609798080350140279}
     m_Position: {x: 370, y: 490, z: 0}
@@ -2742,6 +2817,12 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -5217804110213741600}
     m_Position: {x: -550, y: 420, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 992481156296991134}
+    m_Position: {x: 370, y: 290, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 211238329345277534}
+    m_Position: {x: 370, y: 70, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 4936770207664269181}
@@ -2824,7 +2905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  identifier: 
   useRootMotion: 0
   isBusy: 1
   isEvade: 0
@@ -3031,6 +3111,53 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &8295446417448342330
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 1102303051577564044}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25000012
+  m_TransitionOffset: 0
+  m_ExitTime: 0.6925927
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &8531932241684259759
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Grounded
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 211238329345277534}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.6383715
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &8609798080350140279
 AnimatorState:
   serializedVersion: 5
