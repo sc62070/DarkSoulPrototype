@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3563978429465395775}
   - component: {fileID: 530709406222590549}
   - component: {fileID: 7141960649247520172}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hylian Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}

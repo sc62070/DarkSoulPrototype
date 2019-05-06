@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8146915558586515089}
   - component: {fileID: 4706086560340984519}
   - component: {fileID: -1585210883817316506}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Twilight Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
