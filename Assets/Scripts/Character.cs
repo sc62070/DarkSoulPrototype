@@ -155,7 +155,7 @@ public class Character : MonoBehaviourPun {
             }
 
             // Regenerate stamina
-            if (timeSinceStaminaConsume > 1f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
+            if (timeSinceStaminaConsume > 0.7f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
                 stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
             }
 
