@@ -764,6 +764,7 @@ GameObject:
   - component: {fileID: 794870671}
   - component: {fileID: 794870673}
   - component: {fileID: 794870674}
+  - component: {fileID: 794870675}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -831,6 +832,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: {fileID: 8300000, guid: 1c1136251fc80084e8a91f7d86126e05, type: 3}
+--- !u!114 &794870675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794870670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15e9e3cb734f0a542b7a0bb42d194697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assets:
+    bloodEffect: {fileID: 6318737820249357085, guid: 7d9f7739c99ebd149ab5aefb02499310,
+      type: 3}
+  bloodParticleSystems: []
 --- !u!1 &809719131
 GameObject:
   m_ObjectHideFlags: 0

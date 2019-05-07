@@ -364,7 +364,10 @@ public class Character : MonoBehaviourPun {
                     if(health > 0f) {
                         //Flinch(direction.normalized * 8f);
                         poise -= q;
-                    } 
+                    }
+
+                    // Play the blood effect
+                    EffectManager.instance.PlayBlood(weaponObject.transform.position, transform.forward);
 
                     string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
                     photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
@@ -476,7 +479,6 @@ public class Character : MonoBehaviourPun {
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
-            //Debug.Log(gameObject.name + " is trying to damage " + characterHit.name);
             characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, (35f + 10f * stats.strength) * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
         }
     }
