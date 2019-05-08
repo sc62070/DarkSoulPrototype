@@ -155,7 +155,7 @@ public class Character : MonoBehaviourPun {
             }
 
             // Regenerate stamina
-            if (timeSinceStaminaConsume > 0.7f && timeSinceStaminaRunout > 2f && !isAttacking && !isBlocking && !isEvading) {
+            if (timeSinceStaminaConsume > 0.7f && timeSinceStaminaRunout > 1.5f && !isAttacking && !isBlocking && !isEvading) {
                 stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
             }
 
@@ -293,7 +293,7 @@ public class Character : MonoBehaviourPun {
     }
 
     public void Interact() {
-        if(selectedInteractable != null) {
+        if(selectedInteractable != null && selectedInteractable.IsInteractable) {
             if(selectedInteractable is Ladder) {
                 currentLadder = (Ladder) selectedInteractable;
                 float dot = Vector3.Dot(transform.position - currentLadder.transform.position, currentLadder.transform.up);
@@ -367,7 +367,7 @@ public class Character : MonoBehaviourPun {
                     }
 
                     // Play the blood effect
-                    EffectManager.instance.PlayBlood(weaponObject.transform.position, transform.forward);
+                    EffectManager.instance.PlayBlood(weaponObject.transform.position, attacker.transform.forward);
 
                     string[] clips = { SoundClips.DAMAGE_01, SoundClips.DAMAGE_02, SoundClips.DAMAGE_03 };
                     photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);

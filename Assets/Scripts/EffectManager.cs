@@ -31,7 +31,7 @@ public class EffectManager : MonoBehaviour {
         foreach(ParticleSystem ps in bloodParticleSystems) {
             if (!ps.isPlaying) {
                 ps.transform.position = position;
-                ps.transform.forward = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+                ps.transform.forward = direction;
                 ps.Play();
                 return;
             }

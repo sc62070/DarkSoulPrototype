@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRootMotion: 0
+  useRootMotion: 1
   isBusy: 1
   isEvade: 0
   isAttack: 0
   isEquipped: 0
-  isPhysicsEnabled: 1
+  isPhysicsEnabled: 0
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1102 &-8408176273293566125
@@ -170,7 +170,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: -8866953814672595917}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0

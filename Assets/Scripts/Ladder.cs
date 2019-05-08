@@ -5,6 +5,8 @@ using UnityEngine;
 public class Ladder : Interactable {
     public override string Description { get => "Climb"; set => throw new System.NotImplementedException(); }
 
+    public override bool IsInteractable => true;
+
     public float height = 4f;
 
     public override void Interact(Character character) {

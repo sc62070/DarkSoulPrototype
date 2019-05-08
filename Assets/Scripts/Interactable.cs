@@ -7,6 +7,7 @@ public abstract class Interactable : MonoBehaviour {
     public static Interactable active;
 
     public abstract string Description { get; set; }
+    public abstract bool IsInteractable { get; }
 
     private void Awake() {
     }
@@ -26,7 +27,7 @@ public abstract class Interactable : MonoBehaviour {
         bool detected = false;
         foreach (Collider col in cols) {
             Unimotion.Player player = col.GetComponent<Unimotion.Player>();
-            if (player != null && player.photonView.IsMine) {
+            if (player != null && player.photonView.IsMine && IsInteractable) {
                 detected = true;
                 active = this;
                 break;
