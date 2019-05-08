@@ -11,9 +11,10 @@ public class Character : MonoBehaviourPun {
     public float MaxHealth { get { return stats.vitality / 99f * 2000f; } }
 
     public float stamina = 100f;
-    public float maxStamina = 100f;
+    public float MaxStamina { get {  return stats.endurance / 99f * 2000f; } }
 
     public float poise = 100f;
+    public float MaxPoise { get { return 50f + 20f * stats.poise; } }
 
     public Stats stats;
 
@@ -64,6 +65,8 @@ public class Character : MonoBehaviourPun {
         audioSource = gameObject.AddComponent<AudioSource>();
 
         health = MaxHealth;
+        stamina = MaxStamina;
+        poise = MaxPoise;
 
         motor.OnLand += delegate () {
             if (photonView.IsMine) {
@@ -117,7 +120,7 @@ public class Character : MonoBehaviourPun {
             // Manage poise
             if (poise <= 0f) {
                 Flinch();
-                poise = 100f;
+                poise = MaxPoise;
             }
 
             motor.animator.SetBool("Blocking", isBlocking);
@@ -156,7 +159,7 @@ public class Character : MonoBehaviourPun {
 
             // Regenerate stamina
             if (timeSinceStaminaConsume > 0.7f && timeSinceStaminaRunout > 1.5f && !isAttacking && !isBlocking && !isEvading) {
-                stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, maxStamina);
+                stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, MaxStamina);
             }
 
             // Prevent blocking if evading or blocked
@@ -413,7 +416,7 @@ public class Character : MonoBehaviourPun {
 
     public bool ConsumeStamina(float q) {
         if (stamina > 0f) {
-            stamina = Mathf.Clamp(stamina - q, 0f, maxStamina);
+            stamina = Mathf.Clamp(stamina - q, 0f, MaxStamina);
 
             timeSinceStaminaConsume = 0f;
 
@@ -620,4 +623,5 @@ public class Stats {
     public int vitality = 5;
     public int endurance = 5;
     public int strength = 5;
+    public int poise = 5;
 }

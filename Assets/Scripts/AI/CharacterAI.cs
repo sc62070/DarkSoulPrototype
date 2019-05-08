@@ -159,7 +159,7 @@ public abstract class CharacterAI : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(1f);
 
-            if (character.target != null && character.stamina / character.maxStamina > 0.8f) {
+            if (character.target != null && character.stamina / character.MaxStamina > 0.5f) {
                 shouldBlock = true;
             } else {
                 shouldBlock = false;

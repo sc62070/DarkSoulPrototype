@@ -75,12 +75,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 200
   stamina: 100
-  maxStamina: 100
   poise: 100
   stats:
     vitality: 10
     endurance: 5
     strength: 5
+    poise: 5
   weapon: {fileID: 11400000, guid: a460dde338b2aec4d8580720f1af5ac2, type: 2}
   shield: {fileID: 11400000, guid: 7d22825457911d6408cdb8261cb16359, type: 2}
   inCombat: 0

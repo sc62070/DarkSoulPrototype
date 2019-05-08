@@ -37,8 +37,8 @@ public class UIManager : MonoBehaviour {
 
         if(character != null) {
             healthBar.SetValue(character.health / character.MaxHealth);
-            staminaBar.SetValue(character.stamina / character.maxStamina);
-            poiseBar.SetValue(character.poise / 100f);
+            staminaBar.SetValue(character.stamina / character.MaxStamina);
+            poiseBar.SetValue(character.poise / character.MaxPoise);
         }
 
         bossHealthBar.gameObject.SetActive(boss != null && boss.health > 0f && boss.target != null && boss.target.gameObject == Unimotion.Player.main.gameObject);
