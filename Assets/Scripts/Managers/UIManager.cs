@@ -35,7 +35,9 @@ public class UIManager : MonoBehaviour {
 
     void LateUpdate() {
 
-        if(character != null) {
+        ui.SetActive(Unimotion.Player.main != null && Dialog.conversationTarget == null);
+
+        if (character != null) {
             healthBar.SetValue(character.health / character.MaxHealth);
             staminaBar.SetValue(character.stamina / character.MaxStamina);
             poiseBar.SetValue(character.poise / character.MaxPoise);
@@ -54,14 +56,21 @@ public class UIManager : MonoBehaviour {
         
     }
 
-    public static void Dialog(string text) {
+    public static void ShowDialog(string text) {
         UIManager manager = FindObjectOfType<UIManager>();
-        GameObject o = Instantiate(manager.componentReferences.dialog, manager.mainMenu.transform, false);
+        GameObject o = Instantiate(manager.componentReferences.informationDialog, manager.mainMenu.transform, false);
+        o.GetComponent<Dialog>().SetText(text);
+    }
+
+    public static void ShowConversationDialog(string text) {
+        UIManager manager = FindObjectOfType<UIManager>();
+        GameObject o = Instantiate(manager.componentReferences.conversationDialog, manager.mainMenu.transform, false);
         o.GetComponent<Dialog>().SetText(text);
     }
 }
 
 [System.Serializable]
 public class UIComponentReferences {
-    public GameObject dialog;
+    public GameObject informationDialog;
+    public GameObject conversationDialog;
 }

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.unity.analytics": "3.3.2",
+    "com.unity.cinemachine": "2.3.3",
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.probuilder": "4.0.4",
     "com.unity.progrids": "3.0.3-preview.4",
@@ -8,6 +9,7 @@
     "com.unity.textmeshpro": "2.0.0",
     "com.unity.timeline": "1.0.0",
     "com.unity.xr.legacyinputhelpers": "2.0.2",
+    "li.lightingtools.lightprobesvolumes": "file:../LocalPackages/LightingTools.LightProbesVolumes",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -37,7 +39,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "li.lightingtools.lightprobesvolumes": "file:../LocalPackages/LightingTools.LightProbesVolumes"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

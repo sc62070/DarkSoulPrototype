@@ -83,8 +83,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
         systemText.ShowText("Joined " + targetScene + "...");
         localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Unimotion.Player>();
 
-        GameCamera camera = Camera.main.GetComponent<GameCamera>();
-        camera.socket = localPlayer.cameraSocket;
+        /*GameCamera camera = Camera.main.GetComponent<GameCamera>();
+        camera.socket = localPlayer.cameraSocket;*/
 
         UnityEngine.Events.UnityAction<Scene, LoadSceneMode> tmpDelegate = null;
         tmpDelegate = delegate (Scene scene, LoadSceneMode mode) {

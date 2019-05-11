@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 824043930}
   - component: {fileID: 95026912858024326}
   - component: {fileID: 136687163193735536}
-  - component: {fileID: -2169214329895756714}
   m_Layer: 9
   m_Name: NPC
   m_TagString: Untagged
@@ -50,7 +49,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367994779375688}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6936f18ae084424582095e2885ded59, type: 3}
   m_Name: 
@@ -72,17 +71,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   stamina: 100
+  maxStamina: 100
   poise: 100
   stats:
     vitality: 5
     endurance: 5
     strength: 5
-    poise: 5
   weapon: {fileID: 11400000, guid: a460dde338b2aec4d8580720f1af5ac2, type: 2}
   shield: {fileID: 11400000, guid: 7d22825457911d6408cdb8261cb16359, type: 2}
   inCombat: 0
   isAttacking: 0
-  isBlocking: 0
+  isBlocking: 1
   isEvading: 0
   isBusy: 0
   isEquipped: 0
@@ -322,18 +321,6 @@ CapsuleCollider:
   m_Height: 1.84
   m_Direction: 1
   m_Center: {x: 0, y: 0.92, z: 0}
---- !u!114 &-2169214329895756714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367994779375688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 128ea7807e65e1740af17abaa5859412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &16896830169694859
 GameObject:
   m_ObjectHideFlags: 0

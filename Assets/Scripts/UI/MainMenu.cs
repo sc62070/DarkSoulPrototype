@@ -17,6 +17,6 @@ public class MainMenu : MonoBehaviourPunCallbacks {
     }
 
     public void ShowControls() {
-        UIManager.Dialog("Left Click: Attack \nMouse Wheel Click: Heavy Attack \nRight Click: Block \nShift: Evade \nSpace: Action \nG: Target \nZ: Free Mouse ");
+        UIManager.ShowDialog("Left Click: Attack \nMouse Wheel Click: Heavy Attack \nRight Click: Block \nShift: Evade \nSpace: Action \nG: Target \nZ: Free Mouse ");
     }
 }

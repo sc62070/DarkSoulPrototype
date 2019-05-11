@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 namespace Unimotion {
     public class Player : MonoBehaviourPun {
@@ -16,7 +17,8 @@ namespace Unimotion {
         public float minTargetDistance = 5f;
         public InputType inputType;
 
-        public CameraSocket cameraSocket;
+        public CinemachineVirtualCamera cameraSocket;
+        public CinemachineVirtualCamera dialogueCameraSocket;
 
         private float targetAngle = 25f;
 
@@ -28,10 +30,16 @@ namespace Unimotion {
             character = GetComponent<Character>();
             playerCamera = Camera.main.GetComponent<GameCamera>();
 
-            // Create the camera socket
-            cameraSocket = new GameObject("Camera Socket").AddComponent<CameraSocket>();
-            cameraSocket.gameObject.name = "Camera Socket";
+            // Create and/or prepare the camera socket
+            if(cameraSocket == null) {
+                cameraSocket = new GameObject("Camera Socket").AddComponent<CinemachineVirtualCamera>();
+                cameraSocket.gameObject.name = "Camera Socket";
+            }
+            cameraSocket.transform.parent = null;
             DontDestroyOnLoad(cameraSocket.gameObject);
+            DontDestroyOnLoad(dialogueCameraSocket.gameObject);
+
+            dialogueCameraSocket.enabled = false;
 
             character.OnDie += delegate () {
                 StartCoroutine(DieCoroutine());
@@ -51,6 +59,9 @@ namespace Unimotion {
 
         private void Update() {
             buttonQueue.Update();
+
+            dialogueCameraSocket.enabled = Dialog.conversationTarget != null;
+            dialogueCameraSocket.LookAt = Dialog.conversationTarget;
         }
 
         void LateUpdate() {
@@ -67,7 +78,7 @@ namespace Unimotion {
                 character.Climb(Input.GetAxis("Vertical"));
             }
 
-            if (!character.isBusy) {
+            if (!character.isBusy && Dialog.conversationTarget == null) {
 
                 // Movement
                 if (inputMagnitude > 0.05f) {
@@ -205,7 +216,6 @@ namespace Unimotion {
             return Vector3.ClampMagnitude(input, 1f).magnitude;
         }
 
-
         public void PositionSocket() {
 
             // Get the real target position (add offset)
@@ -218,10 +228,11 @@ namespace Unimotion {
             }
             input = input + new Vector3(Input.GetAxis("Camera Horizontal") * 60f * Time.deltaTime, Input.GetAxis("Camera Vertical") * 60f * Time.deltaTime, 0f);
 
-            // Rotate the Camera
+            // Rotate the Camera according to input
             float orbitSpeed = 2.5f;
             cameraSocket.transform.RotateAround(motor.transform.position, -motor.GetGravity().normalized, input.x * orbitSpeed);
             cameraSocket.transform.RotateAround(motor.transform.position, cameraSocket.transform.right, input.y * orbitSpeed);
+            cameraSocket.transform.rotation = Quaternion.LookRotation(cameraSocket.transform.forward, Vector3.up);
 
             // Before calculating desired distance, see if there is any obstacles to avoid
             float distance = 3f;
@@ -241,14 +252,14 @@ namespace Unimotion {
             // Put the camera socket around the player
             Vector3 desiredPosition = realTarget - cameraSocket.transform.forward * (maxDistance - 0.1f);
             cameraSocket.transform.position = desiredPosition;
-            FindObjectOfType<GameCamera>().OnSocketPositionChanged(cameraSocket);
+            //FindObjectOfType<GameCamera>().OnSocketPositionChanged(cameraSocket);
 
             // If there is a combat target
             if (character.target != null) {
 
                 // Move the camera so it accomodates the player right behind the target
                 Quaternion tmp = Quaternion.LookRotation((character.target.transform.position - transform.position).normalized, -motor.GetGravity().normalized);
-                cameraSocket.transform.rotation = Quaternion.Lerp(cameraSocket.transform.rotation, tmp, 2 * Time.deltaTime);
+                cameraSocket.transform.rotation = Quaternion.Lerp(cameraSocket.transform.rotation, tmp, 3f * Time.deltaTime);
 
                 // Fix the camera at certain angle
                 cameraSocket.transform.localEulerAngles = new Vector3(targetAngle, cameraSocket.transform.localEulerAngles.y, cameraSocket.transform.localEulerAngles.z);
