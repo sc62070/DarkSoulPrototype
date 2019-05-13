@@ -19,4 +19,9 @@ public class MainMenu : MonoBehaviourPunCallbacks {
     public void ShowControls() {
         UIManager.ShowDialog("Left Click: Attack \nMouse Wheel Click: Heavy Attack \nRight Click: Block \nShift: Evade \nSpace: Action \nG: Target \nZ: Free Mouse ");
     }
+
+    public void ShowLogin() {
+        UIManager manager = FindObjectOfType<UIManager>();
+        GameObject o = Instantiate(manager.componentReferences.loginDialog, manager.mainMenu.transform, false);
+    }
 }

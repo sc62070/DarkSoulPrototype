@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [Header("Texts")]
     public SystemText systemText;
 
+    [Header("Config")]
+    public string startingScene = "world";
+
     public GameAnimations animations;
 
     private static string targetScene = "world";
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     void Start() {
-        //networkManager.ConnectToMaster();
+        targetScene = startingScene;
     }
 
     public static void GoToScene(string sceneName, string markerId) {
@@ -66,7 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         if (PhotonNetwork.OfflineMode == true) {
             systemText.ShowText("Creating offline room...");
-            PhotonNetwork.JoinOrCreateRoom("offline", new RoomOptions() { MaxPlayers = 20 }, TypedLobby.Default);
+            PhotonNetwork.JoinOrCreateRoom(targetScene, new RoomOptions() { MaxPlayers = 20 }, TypedLobby.Default);
         }
 
         PhotonNetwork.JoinLobby();
@@ -89,7 +92,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         UnityEngine.Events.UnityAction<Scene, LoadSceneMode> tmpDelegate = null;
         tmpDelegate = delegate (Scene scene, LoadSceneMode mode) {
 
-            localPlayer.transform.position = Vector3.zero;
+            localPlayer.transform.position = Vector3.zero + Vector3.up;
             localPlayer.transform.rotation = Quaternion.identity;
 
             FindObjectOfType<UIManager>().character = localPlayer.GetComponent<Character>();

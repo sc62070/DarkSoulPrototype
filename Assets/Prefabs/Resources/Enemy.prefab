@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 95026912858024326}
   - component: {fileID: 136687163193735536}
   m_Layer: 9
-  m_Name: NPC
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,12 +71,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   stamina: 100
-  maxStamina: 100
   poise: 100
   stats:
     vitality: 5
     endurance: 5
     strength: 5
+    poise: 5
   weapon: {fileID: 11400000, guid: a460dde338b2aec4d8580720f1af5ac2, type: 2}
   shield: {fileID: 11400000, guid: 7d22825457911d6408cdb8261cb16359, type: 2}
   inCombat: 0
@@ -2758,8 +2758,8 @@ Projector:
   m_FarClipPlane: 100
   m_FieldOfView: 75.43
   m_AspectRatio: 1
-  m_Orthographic: 0
-  m_OrthographicSize: 1.3
+  m_Orthographic: 1
+  m_OrthographicSize: 1.6
   m_Material: {fileID: 2100000, guid: 4d4679d4a25c72d46a73eb737f1e6386, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2

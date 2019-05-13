@@ -158,7 +158,7 @@ public class Character : MonoBehaviourPun {
             }
 
             // Regenerate stamina
-            if (timeSinceStaminaConsume > 0.7f && timeSinceStaminaRunout > 1.5f && !isAttacking && !isBlocking && !isEvading) {
+            if (timeSinceStaminaConsume > 0.5f && timeSinceStaminaRunout > 1.0f && !isAttacking && !isBlocking && !isEvading) {
                 stamina = Mathf.Clamp(stamina + 30f * Time.deltaTime, 0f, MaxStamina);
             }
 
@@ -335,7 +335,7 @@ public class Character : MonoBehaviourPun {
     }
 
     [PunRPC]
-    public void AttemptDamage(float q, Vector3 direction, int attackerViewId) {
+    public void AttemptDamage(float q, Vector3 direction, int attackerViewId, AttackForce force) {
         if (photonView.IsMine) {
 
             Character attacker = PhotonView.Find(attackerViewId).GetComponent<Character>();
@@ -353,6 +353,10 @@ public class Character : MonoBehaviourPun {
                     photonView.RPC("PlaySound", RpcTarget.All, clips[Random.Range(0, clips.Length)]);
 
                     ConsumeStamina(q);
+
+                    if (stamina <= 0f) {
+                        OnBlockStaminaRunout(force);
+                    }
 
                     timeSinceLastDamage = 0f;
 
@@ -422,6 +426,7 @@ public class Character : MonoBehaviourPun {
 
             if (stamina <= 0f) {
                 timeSinceStaminaRunout = 0f;
+                OnStaminaRunout();
             }
 
             return true;
@@ -482,7 +487,20 @@ public class Character : MonoBehaviourPun {
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
-            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, (35f + 10f * stats.strength) * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID);
+            characterHit.photonView.RPC("AttemptDamage", RpcTarget.All, (35f + 10f * stats.strength) * lastAttackMove.damageMultiplier, characterHit.transform.position - transform.position, photonView.ViewID, lastAttackMove.force);
+        }
+    }
+
+    public void OnStaminaRunout() {
+    }
+
+    public void OnBlockStaminaRunout(AttackForce force) {
+        if(isBlocking) {
+            if (force == AttackForce.Huge) {
+                photonView.RPC("PlayState", RpcTarget.All, "Knockback", 0f);
+            } else {
+                photonView.RPC("PlayState", RpcTarget.All, "Stun", 0.2f);
+            }
         }
     }
 
@@ -563,59 +581,6 @@ public class Character : MonoBehaviourPun {
         /*CapsuleCollider capsule = GetComponent<CapsuleCollider>();
         Gizmos.DrawSphere(transform.position + transform.forward * attackRadius * 2f + transform.up * 1.3f, attackRadius);*/
     }
-}
-
-public enum AttackType {
-    Light, Heavy
-}
-
-[System.Serializable]
-public class AttackMove {
-    public string stateName;
-    public AttackType type;
-    public float damageMultiplier = 1f;
-    public AttackMove nextAttack;
-
-    public AttackMove() {
-        
-    }
-
-    public AttackMove(string stateName, AttackType type, float damageMultiplier) {
-        this.stateName = stateName;
-        this.type = type;
-        this.damageMultiplier = damageMultiplier;
-    }
-
-    public AttackMove(string stateName, float damageMultiplier) {
-        this.stateName = stateName;
-        this.damageMultiplier = damageMultiplier;
-    }
-}
-
-public class AttackMoves {
-
-    // Heavy slashes
-    public static AttackMove slashHeavy = new AttackMove() {
-        stateName = "Slash Heavy",
-        type = AttackType.Heavy,
-        damageMultiplier = 2f,
-        nextAttack = null
-    };
-
-    // Light slashes
-    public static AttackMove slashRL = new AttackMove() {
-        stateName = "Slash RL",
-        type = AttackType.Light,
-        damageMultiplier = 1f,
-        nextAttack = null
-    };
-
-    public static AttackMove slashR = new AttackMove() {
-        stateName = "Slash R",
-        type = AttackType.Light,
-        damageMultiplier = 1f,
-        nextAttack = slashRL
-    };
 }
 
 [System.Serializable]

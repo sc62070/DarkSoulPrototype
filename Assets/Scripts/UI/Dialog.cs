@@ -10,6 +10,9 @@ public class Dialog : MonoBehaviour {
     public static Transform conversationTarget;
     public static Queue<string> dialogueQueue = new Queue<string>();
 
+    [Header("References")]
+    public Text text;
+
     public event Action OnContinue;
     public event Action OnConversationEnd;
 
@@ -32,6 +35,10 @@ public class Dialog : MonoBehaviour {
             conversationTarget = null;
         }
         Destroy(gameObject);
+    }
+
+    public void Close() {
+        Destroy(this.gameObject);
     }
 
     public static void Show(string text) {

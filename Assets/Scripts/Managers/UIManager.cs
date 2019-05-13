@@ -73,4 +73,6 @@ public class UIManager : MonoBehaviour {
 public class UIComponentReferences {
     public GameObject informationDialog;
     public GameObject conversationDialog;
+    public GameObject registerDialog;
+    public GameObject loginDialog;
 }

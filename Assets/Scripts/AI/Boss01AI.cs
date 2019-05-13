@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Boss01AI : BossAI {
     public override AttackMove PickAttack() {
-        AttackMove[] moves = { new AttackMove("Combo B", 1f), new AttackMove("Special 1", 1f)};
+        AttackMove[] moves = {
+            new AttackMove("Combo B", 1f, AttackType.Heavy, AttackForce.Huge),
+            new AttackMove("Special 1", 1f, AttackType.Heavy, AttackForce.Huge)
+        };
         return moves[Random.Range(0, moves.Length)];
     }
 }
