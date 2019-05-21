@@ -10,7 +10,8 @@ public class StateBehaviour : StateMachineBehaviour {
     [Header("Behaviour")]
     public bool useRootMotion = false;
 
-    public bool isBusy = false;
+    [Range(0f, 1f)]
+    public float targetMovementMultiplier = 1f;
     public bool isEvade = false;
     public bool isAttack = false;
     public bool isEquipped = false;
@@ -36,7 +37,6 @@ public class StateBehaviour : StateMachineBehaviour {
         //Debug.Log(stateInfo.shortNameHash);
         currentStateHash = stateInfo.shortNameHash;
 
-        character.isBusy = isBusy;
         character.isEvading = isEvade;
         character.isAttacking = isAttack;
         character.isEquipped = isEquipped;
@@ -79,7 +79,6 @@ public class StateBehaviour : StateMachineBehaviour {
         }*/
 
         if (currentState.shortNameHash.Equals(stateInfo.shortNameHash) || animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash)) {
-            float targetMovementMultiplier = isBusy ? 0f : 1f;
             character.movementMultiplier = Mathf.MoveTowards(character.movementMultiplier, targetMovementMultiplier, 4f * Time.deltaTime);
             Debug.Log(character.movementMultiplier);
         }
