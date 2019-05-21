@@ -34,6 +34,10 @@ public class Character : MonoBehaviourPun {
     public bool isWeaponDamaging = false;
     public bool isPhysicsEnabled = true;
 
+    // These fields should only be overridden by Animator Behaviours
+    [Range(0f, 1f)]
+    public float movementMultiplier = 1f;
+
     [Header("Status")]
     public Interactable selectedInteractable;
     public Ladder currentLadder;
@@ -108,12 +112,16 @@ public class Character : MonoBehaviourPun {
                 }
             }
 
-            motor.canWalk = !isBusy && !isAttacking && !isEvading;
-            motor.canJump = !isBusy && !isAttacking && !isEvading;
-            motor.canTurn = !isBusy && !isAttacking && !isEvading;
+            //motor.canWalk = !isBusy && !isAttacking && !isEvading;
+            //motor.canJump = !isBusy && !isAttacking && !isEvading;
+            //motor.canTurn = !isBusy && !isAttacking && !isEvading;
+
+            /*motor.canWalk = movementMultiplier > 0.5f;
+            motor.canTurn = movementMultiplier > 0.5f;
+            motor.canJump = movementMultiplier > 0.5f;*/
 
             // Turn torwards target
-            if(target != null && motor.canTurn) {
+            if (target != null && motor.canTurn) {
                 motor.TurnTowards((target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Normal);
             }
 
@@ -200,6 +208,7 @@ public class Character : MonoBehaviourPun {
         shieldObject.SetActive(isEquipped);
         shieldBackObject.SetActive(!isEquipped);
 
+        //Debug.Log(movementMultiplier);
     }
 
     public void Attack(AttackType type) {

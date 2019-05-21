@@ -78,11 +78,11 @@ namespace Unimotion {
                 character.Climb(Input.GetAxis("Vertical"));
             }
 
-            if (!character.isBusy && Dialog.conversationTarget == null) {
+            if (/*!character.isBusy &&*/ Dialog.conversationTarget == null) {
 
                 // Movement
                 if (inputMagnitude > 0.05f) {
-                    motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
+                    motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f) * character.movementMultiplier);
 
                     // Only turn if the character has no target
                     if(character.target == null) {

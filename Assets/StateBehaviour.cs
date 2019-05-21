@@ -16,6 +16,9 @@ public class StateBehaviour : StateMachineBehaviour {
     public bool isEquipped = false;
     public bool isPhysicsEnabled = true;
 
+    [Tooltip("If this is set to true, when the animator enters this state, Character.movementMultiplier will be set to 0. This means the character will stop instantly")]
+    public bool initMultiplierOnEnter = false;
+
     [Header("Visual")]
     public EquipmentAccomodation equipmentAccomodation = EquipmentAccomodation.Kubold;
     public Vector3 constantMovement;
@@ -40,6 +43,8 @@ public class StateBehaviour : StateMachineBehaviour {
         character.isPhysicsEnabled = isPhysicsEnabled;
 
         character.Reaccomodate(equipmentAccomodation);
+
+        character.movementMultiplier = initMultiplierOnEnter ? 0f : character.movementMultiplier;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -58,14 +63,45 @@ public class StateBehaviour : StateMachineBehaviour {
             
         }
 
-        if (animator.GetNextAnimatorStateInfo(0).shortNameHash == 0 || animator.GetNextAnimatorStateInfo(0).shortNameHash == stateInfo.shortNameHash) {
+        /*if (animator.GetNextAnimatorStateInfo(0).shortNameHash == 0 || animator.GetNextAnimatorStateInfo(0).shortNameHash == stateInfo.shortNameHash) {
             motor.Move(animator.transform.rotation * constantMovement * Time.deltaTime);
-        }
+        }*/
             
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        //animator.GetNextAnimatorClipInfo(0)[0].
 
+        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(layerIndex);
+
+        /*if(currentState.IsName("Grounded Combat") && animator.IsInTransition(layerIndex)) {
+            Debug.Log(animator.GetAnimatorTransitionInfo(layerIndex).normalizedTime);
+        }*/
+
+        if (currentState.shortNameHash.Equals(stateInfo.shortNameHash) || animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash)) {
+            float targetMovementMultiplier = isBusy ? 0f : 1f;
+            character.movementMultiplier = Mathf.MoveTowards(character.movementMultiplier, targetMovementMultiplier, 4f * Time.deltaTime);
+            Debug.Log(character.movementMultiplier);
+        }
+
+        /*if (animator.IsInTransition(layerIndex) && animator.GetCurrentAnimatorClipInfoCount(layerIndex) > 0 && currentState.IsName("Grounded Combat")) {
+            Debug.Log(animator.GetCurrentAnimatorClipInfo(layerIndex)[0].clip);
+            Debug.Log(currentState.shortNameHash);
+        }*/
+
+        /*if (animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash == stateInfo.shortNameHash) {
+            float targetMovementMultiplier = isBusy ? 0f : 1f;
+
+            if (animator.IsInTransition(layerIndex) && animator.GetNextAnimatorClipInfoCount(layerIndex) > 0) {
+                AnimatorClipInfo[] clips = animator.GetNextAnimatorClipInfo(layerIndex);
+                float weightOfThis = 1f - clips[0].weight;
+                character.movementMultiplier = targetMovementMultiplier * weightOfThis;
+
+            } else {
+                character.movementMultiplier = targetMovementMultiplier;
+            }
+        }*/
+        
     }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
