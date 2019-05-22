@@ -86,7 +86,7 @@ namespace Unimotion {
 
                     // Only turn if the character has no target
                     if(character.target == null) {
-                        motor.TurnTowards(inputVector);
+                        motor.TurnTowards(inputVector, motor.turnBehaviour, motor.turnSpeed * character.movementMultiplier);
                     }
                 }
 
