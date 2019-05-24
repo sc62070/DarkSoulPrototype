@@ -70,7 +70,7 @@ public abstract class CharacterAI : MonoBehaviour {
 
                             /// Chase target
                             if (canReach && path.corners.Length >= 2) {
-                                motor.Walk((path.corners[1] - transform.position).normalized);
+                                character.Walk((path.corners[1] - transform.position).normalized);
                             }
                         } else {
                             character.Attack(AttackType.Light);
@@ -78,13 +78,13 @@ public abstract class CharacterAI : MonoBehaviour {
                     }
                     break;
                 case AIState.RoundingTarget:
-                    motor.Walk(transform.right * roundDirectionChangeMultiplier * combatSpeed);
+                    character.Walk(transform.right * roundDirectionChangeMultiplier * combatSpeed);
                     break;
                 case AIState.Attacking:
 
                     /// Chase target
                     if (canReach && path.corners.Length >= 2) {
-                        motor.Walk((path.corners[1] - transform.position).normalized);
+                        character.Walk((path.corners[1] - transform.position).normalized);
                     }
 
                     if (Vector3.Distance(transform.position, character.target.transform.position) < 2f) {

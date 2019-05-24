@@ -20,6 +20,9 @@ public class StateBehaviour : StateMachineBehaviour {
     [Tooltip("If this is set to true, when the animator enters this state, Character.movementMultiplier will be set to 0. This means the character will stop instantly")]
     public bool initMultiplierOnEnter = false;
 
+    [Header("Other")]
+    public bool smoothMovementMultiplier = true;
+
     [Header("Visual")]
     public EquipmentAccomodation equipmentAccomodation = EquipmentAccomodation.Kubold;
     public Vector3 constantMovement;
@@ -44,7 +47,9 @@ public class StateBehaviour : StateMachineBehaviour {
 
         character.Reaccomodate(equipmentAccomodation);
 
-        character.movementMultiplier = initMultiplierOnEnter ? 0f : character.movementMultiplier;
+        //character.movementMultiplier = initMultiplierOnEnter ? 0f : character.movementMultiplier;
+
+        startingtMovementMultiplier = character.movementMultiplier;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -52,55 +57,76 @@ public class StateBehaviour : StateMachineBehaviour {
         this.animator = null;
     }
 
+    float constantMovementMultiplier = 0f;
+
     // OnStateMove is called right after Animator.OnAnimatorMove()
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
 
         //                  (                       vvvv Maybe deleting this could solve the bug?
         if (useRootMotion/* && stateInfo.shortNameHash == currentStateHash*/) {
-                animator.ApplyBuiltinRootMotion();
+            animator.ApplyBuiltinRootMotion();
             //animator.deltaPosition;
-            
+
         }
 
-        /*if (animator.GetNextAnimatorStateInfo(0).shortNameHash == 0 || animator.GetNextAnimatorStateInfo(0).shortNameHash == stateInfo.shortNameHash) {
-            motor.Move(animator.transform.rotation * constantMovement * Time.deltaTime);
-        }*/
-            
+        
+
+        float stateWeight = GetWeight(animator, stateInfo, layerIndex);
+
+        // Apply constant movement
+        Debug.Log("Moving by " + constantMovement + " at " + stateWeight);
+        motor.Move(animator.transform.rotation * constantMovement * stateWeight * Time.deltaTime);
+        
+        
+
+        //motor.Move(animator.transform.rotation * constantMovement * (1f - character.movementMultiplier) * Time.deltaTime);
+
     }
+
+    private float stateWeight = 0f;
+    private float startingtMovementMultiplier = 999f;
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         //animator.GetNextAnimatorClipInfo(0)[0].
 
-        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(layerIndex);
-
-        /*if(currentState.IsName("Grounded Combat") && animator.IsInTransition(layerIndex)) {
-            Debug.Log(animator.GetAnimatorTransitionInfo(layerIndex).normalizedTime);
+        // Useful code to understand states and clips
+        /*Debug.Log("====================================================================================");
+        Debug.Log("");
+        Debug.Log("CURRENT STATE = " + animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash);
+        Debug.Log("CURRENT CLIPS");
+        foreach (AnimatorClipInfo aci in animator.GetCurrentAnimatorClipInfo(layerIndex)) {
+            Debug.Log(aci.clip + ", weight: " + aci.weight);
+        }
+        Debug.Log("");
+        Debug.Log("NEXT STATE = " + animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash);
+        Debug.Log("NEXT CLIPS");
+        foreach (AnimatorClipInfo aci in animator.GetNextAnimatorClipInfo(layerIndex)) {
+            Debug.Log(aci.clip + ", weight: " + aci.weight);
         }*/
+        //float stateWeight = GetWeight(animator, stateInfo, layerIndex);
 
-        if (currentState.shortNameHash.Equals(stateInfo.shortNameHash) || animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash)) {
-            character.movementMultiplier = Mathf.MoveTowards(character.movementMultiplier, targetMovementMultiplier, 4f * Time.deltaTime);
-            Debug.Log(character.movementMultiplier);
+        // If the current state is this one...
+        bool currentIsThis = animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash);
+        bool nextIsThis = animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash);
+        bool inTransition = animator.IsInTransition(layerIndex);
+
+        bool inControl = (currentIsThis && !inTransition) || nextIsThis;
+
+        // This code could be simplified now that I have the method GetWeight()
+        if (inControl && inTransition) {
+            // If it enters here, it means we are in control because we are the NEXT state
+            AnimatorTransitionInfo transition = animator.GetAnimatorTransitionInfo(layerIndex);
+            character.movementMultiplier = Mathf.Lerp(startingtMovementMultiplier, targetMovementMultiplier, transition.normalizedTime);
+            stateWeight = transition.normalizedTime;
+        } else if (inControl) {
+            // If it enters here, it means we are in control because we are the CURRENT state and there is NO NEXT state
+            character.movementMultiplier = targetMovementMultiplier;
+            stateWeight = 1f;
+        } else {
+            stateWeight = 0f;
         }
 
-        /*if (animator.IsInTransition(layerIndex) && animator.GetCurrentAnimatorClipInfoCount(layerIndex) > 0 && currentState.IsName("Grounded Combat")) {
-            Debug.Log(animator.GetCurrentAnimatorClipInfo(layerIndex)[0].clip);
-            Debug.Log(currentState.shortNameHash);
-        }*/
-
-        /*if (animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash == stateInfo.shortNameHash) {
-            float targetMovementMultiplier = isBusy ? 0f : 1f;
-
-            if (animator.IsInTransition(layerIndex) && animator.GetNextAnimatorClipInfoCount(layerIndex) > 0) {
-                AnimatorClipInfo[] clips = animator.GetNextAnimatorClipInfo(layerIndex);
-                float weightOfThis = 1f - clips[0].weight;
-                character.movementMultiplier = targetMovementMultiplier * weightOfThis;
-
-            } else {
-                character.movementMultiplier = targetMovementMultiplier;
-            }
-        }*/
-        
     }
 
     // OnStateIK is called right after Animator.OnAnimatorIK()
@@ -113,6 +139,28 @@ public class StateBehaviour : StateMachineBehaviour {
 
         animator.SetIKRotation(AvatarIKGoal.LeftHand, t.rotation);
         animator.SetIKPosition(AvatarIKGoal.LeftHand, t.position + t.up * 1.2f + t.forward * 0.3f);*/
+    }
+
+    public float GetWeight(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        float stateWeight = 0f;
+        AnimatorTransitionInfo transition = animator.GetAnimatorTransitionInfo(layerIndex);
+
+        bool currentIsThis = animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash);
+        bool nextIsThis = animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash.Equals(stateInfo.shortNameHash);
+        bool inTransition = animator.IsInTransition(layerIndex);
+
+        bool inControl = (currentIsThis && !inTransition) || nextIsThis;
+
+        if (currentIsThis && !inTransition) {
+            stateWeight = 1f;
+        } else if (currentIsThis && inTransition) {
+            stateWeight = 1f - transition.normalizedTime;
+        } else if (nextIsThis && inTransition) {
+            stateWeight = transition.normalizedTime;
+        } else {
+            stateWeight = 0f;
+        }
+        return stateWeight;
     }
 
 }

@@ -82,11 +82,11 @@ namespace Unimotion {
 
                 // Movement
                 if (inputMagnitude > 0.05f) {
-                    motor.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f) * character.movementMultiplier);
+                    character.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
 
                     // Only turn if the character has no target
                     if(character.target == null) {
-                        motor.TurnTowards(inputVector, motor.turnBehaviour, motor.turnSpeed * character.movementMultiplier);
+                        character.Turn(inputVector);
                     }
                 }
 

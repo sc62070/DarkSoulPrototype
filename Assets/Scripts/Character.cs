@@ -121,9 +121,13 @@ public class Character : MonoBehaviourPun {
             motor.canJump = movementMultiplier > 0.5f;*/
 
             // Turn torwards target
-            if (target != null && motor.canTurn) {
+            /*if (target != null && motor.canTurn) {
                 motor.TurnTowards((target.transform.position - transform.position), CharacterMotor.TurnBehaviour.Normal);
+            }*/
+            if(target != null) {
+                Turn((target.transform.position - transform.position));
             }
+            
 
             // Manage poise
             if (poise <= 0f) {
@@ -493,6 +497,7 @@ public class Character : MonoBehaviourPun {
         }
     }
 
+    #region Handlers --------------------------------------------------------------------------------
     public void OnWeaponHit(Character characterHit) {
         //if (isWeaponDamaging && isAttacking && !alreadyDamaged.Contains(characterHit)) {
         if (characterHit != this && motor.animator.GetFloat("Curve/Damage") > 0.95f && photonView.IsMine) {
@@ -511,6 +516,15 @@ public class Character : MonoBehaviourPun {
                 photonView.RPC("PlayState", RpcTarget.All, "Stun", 0.2f);
             }
         }
+    }
+    #endregion
+
+    public void Walk(Vector3 delta) {
+        motor.Walk(delta * movementMultiplier);
+    }
+
+    public void Turn(Vector3 direction) {
+        motor.TurnTowards(direction, motor.turnBehaviour, motor.turnSpeed * movementMultiplier);
     }
 
     public void Reaccomodate(EquipmentAccomodation accomodation) {

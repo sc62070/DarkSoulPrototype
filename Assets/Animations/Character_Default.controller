@@ -19,6 +19,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 0
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1102 &-8408176273293566125
@@ -97,6 +98,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &-7168320942260445263
@@ -206,6 +208,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1102 &-5217804110213741600
@@ -281,6 +284,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 0
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &-3789729799620536502
@@ -302,6 +306,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 1
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &-2656215062771168543
@@ -345,6 +350,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 1
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1102 &-2550070238511356484
@@ -394,6 +400,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &-1850329382827598188
@@ -464,7 +471,8 @@ MonoBehaviour:
   isAttack: 0
   isEquipped: 1
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &-735906927141972996
@@ -480,12 +488,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useRootMotion: 1
-  targetMovementMultiplier: 1
+  targetMovementMultiplier: 0
   isEvade: 0
   isAttack: 1
   isEquipped: 1
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 1
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &-208167760119377096
@@ -671,6 +680,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114079966693801690
@@ -692,6 +702,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114226559858296224
@@ -713,6 +724,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114301569299427808
@@ -734,6 +746,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 1
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114374495137679874
@@ -755,6 +768,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114378291971219146
@@ -769,13 +783,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   targetMovementMultiplier: 0
   isEvade: 1
   isAttack: 0
   isEquipped: 0
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: -6, y: 0, z: 0}
 --- !u!114 &114485123813135492
@@ -797,6 +812,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114500494302952510
@@ -818,6 +834,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114503884021397274
@@ -839,6 +856,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114509556097134784
@@ -853,13 +871,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   targetMovementMultiplier: 0
   isEvade: 1
   isAttack: 0
   isEquipped: 1
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: -6}
 --- !u!114 &114530976982285354
@@ -874,13 +893,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   targetMovementMultiplier: 0
   isEvade: 1
   isAttack: 0
-  isEquipped: 0
+  isEquipped: 1
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 0
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 6}
 --- !u!114 &114581444778193568
@@ -895,13 +915,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49eea6723c73cb4ab73c5085c9df1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRootMotion: 1
+  useRootMotion: 0
   targetMovementMultiplier: 0
   isEvade: 1
   isAttack: 0
   isEquipped: 0
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 6, y: 0, z: 0}
 --- !u!114 &114603944038200292
@@ -923,6 +944,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114967266585369686
@@ -944,6 +966,7 @@ MonoBehaviour:
   isEquipped: 1
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 1
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &114985346784978400
@@ -965,6 +988,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 1
   initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!206 &206355022420504700
@@ -2199,9 +2223,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.28567922
-  m_TransitionOffset: 0.06427472
-  m_ExitTime: 0.48740768
+  m_TransitionDuration: 0.21802682
+  m_TransitionOffset: 0.0995104
+  m_ExitTime: 0.5860674
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -3043,6 +3067,7 @@ MonoBehaviour:
   isEquipped: 0
   isPhysicsEnabled: 0
   initMultiplierOnEnter: 0
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &1885014307409766820
@@ -3179,7 +3204,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 7277713134028488655}
-    m_Position: {x: 410, y: 30, z: 0}
+    m_Position: {x: 380, y: 40, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -3336,7 +3361,8 @@ MonoBehaviour:
   isAttack: 0
   isEquipped: 1
   isPhysicsEnabled: 1
-  initMultiplierOnEnter: 0
+  initMultiplierOnEnter: 1
+  smoothMovementMultiplier: 1
   equipmentAccomodation: 0
   constantMovement: {x: 0, y: 0, z: 0}
 --- !u!1101 &8295446417448342330
