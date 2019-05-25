@@ -524,6 +524,10 @@ public class Character : MonoBehaviourPun {
     }
 
     public void Turn(Vector3 direction) {
+        float angle = Vector3.Angle(transform.forward, direction);
+        if (angle > 150f && !motor.animator.GetCurrentAnimatorStateInfo(0).IsName("Turn 180 Running")) {
+            photonView.RPC("PlayState", RpcTarget.All, "Turn 180 Running", 0.0f);
+        }
         motor.TurnTowards(direction, motor.turnBehaviour, motor.turnSpeed * movementMultiplier);
     }
 

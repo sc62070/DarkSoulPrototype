@@ -75,7 +75,7 @@ public class StateBehaviour : StateMachineBehaviour {
         float stateWeight = GetWeight(animator, stateInfo, layerIndex);
 
         // Apply constant movement
-        Debug.Log("Moving by " + constantMovement + " at " + stateWeight);
+
         motor.Move(animator.transform.rotation * constantMovement * stateWeight * Time.deltaTime);
         
         
