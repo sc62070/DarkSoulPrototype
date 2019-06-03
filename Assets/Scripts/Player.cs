@@ -57,18 +57,10 @@ namespace Unimotion {
 
         }
 
+        private float previousInputMagnitude;
+
         private void Update() {
             buttonQueue.Update();
-
-            dialogueCameraSocket.enabled = Dialog.conversationTarget != null;
-            dialogueCameraSocket.LookAt = Dialog.conversationTarget;
-        }
-
-        void LateUpdate() {
-
-            if (!photonView.IsMine) {
-                return;
-            }
 
             float inputMagnitude = GetInputMagnitude();
             Vector3 inputVector = GetInputVector();
@@ -78,17 +70,36 @@ namespace Unimotion {
                 character.Climb(Input.GetAxis("Vertical"));
             }
 
+            // Movement
+            if (inputMagnitude > 0.05f) {
+                character.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
+
+                // Only turn if the character has no target
+                if (character.target == null) {
+                    character.Turn(inputVector);
+                }
+            }
+
+            Debug.Log(inputMagnitude - previousInputMagnitude);
+            /*if(inputMagnitude - previousInputMagnitude < 1f * Time.deltaTime && !motor.animator.GetCurrentAnimatorStateInfo(0).IsName("Running Stop")) {
+                character.photonView.RPC("PlayState", RpcTarget.All, "Running Stop", 0f);
+            }*/
+
+            dialogueCameraSocket.enabled = Dialog.conversationTarget != null;
+            dialogueCameraSocket.LookAt = Dialog.conversationTarget;
+
+            previousInputMagnitude = inputMagnitude;
+        }
+
+        void LateUpdate() {
+
+            if (!photonView.IsMine) {
+                return;
+            }
+
             if (/*!character.isBusy &&*/ Dialog.conversationTarget == null) {
 
-                // Movement
-                if (inputMagnitude > 0.05f) {
-                    character.Walk(inputVector * inputMagnitude * (Input.GetButton("Circle") ? 1.5f : 1f) * (Input.GetKey(KeyCode.LeftAlt) ? 0.5f : 1f));
-
-                    // Only turn if the character has no target
-                    if(character.target == null) {
-                        character.Turn(inputVector);
-                    }
-                }
+                
 
                 // Jumping
                 /*if (buttonQueue.Consume("Cross")) {

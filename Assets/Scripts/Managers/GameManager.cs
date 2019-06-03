@@ -48,6 +48,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
         targetScene = startingScene;
     }
 
+    private void LateUpdate() {
+        if (Input.GetKeyDown(KeyCode.P)) {
+            Debug.Break();
+        }
+    }
+
     public static void GoToScene(string sceneName, string markerId) {
 
         targetScene = sceneName;

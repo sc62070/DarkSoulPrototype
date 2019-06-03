@@ -87,12 +87,14 @@ MonoBehaviour:
   isEquipped: 0
   isWeaponDamaging: 0
   isPhysicsEnabled: 1
+  movementMultiplier: 1
   selectedInteractable: {fileID: 0}
   currentLadder: {fileID: 0}
   lastAttackMove:
     stateName: 
     type: 0
     damageMultiplier: 1
+    force: 0
   lastAttackTimer: 0
   target: {fileID: 0}
   clip: {fileID: 0}
@@ -2906,7 +2908,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6c03aea8120a1644fa954b99ea79693a, type: 2}
+  - {fileID: 2100000, guid: 16b42bf78b694e443b182f98c90fa5cf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
