@@ -1,1 +1,1 @@
-# ytivarg-fps
+# soul like game prototype
